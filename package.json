@@ -1,0 +1,27 @@
+{
+  "name": "eco-city",
+  "version": "0.0.1",
+  "description": "An app that allows residents to report environmental problems (e.g., wild dumps, lighting failures, smog) and track their status",
+  "author": "Jakub Korytko",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JakubKorytko/EcoCity.git"
+  },
+  "homepage": "https://github.com/JakubKorytko/EcoCity",
+  "bugs": {
+    "url": "https://github.com/JakubKorytko/EcoCity/issues"
+  },
+  "keywords": [
+    "eco",
+    "eco-city",
+    "city",
+    "environment",
+    "reports"
+  ],
+  "scripts": {
+    "setup": "node setup.mjs"
+  },
+  "web-types": "./web-types.json",
+  "type": "module"
+}

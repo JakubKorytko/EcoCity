@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "js-types-syntax": "typescript",
+  "description-markup": "markdown",
+  "name": "@piglet/components",
+  "version": "1.0.0",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "RenderIf",
+          "description": "Conditional rendering component that shows or hides its content based on the `condition` attribute. Supports boolean values, state keys, or nested paths (e.g., `user.loggedIn`). Negation is supported using the `!` prefix.",
+          "attributes": [
+            {
+              "name": "condition",
+              "description": "Boolean expression or state path to evaluate. Supports negation with `!`, e.g., `!user.loggedIn`.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean | string"
+              },
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "App",
+          "description": "Top-level application router component. Dynamically loads pages based on the current route and injects them into its shadow DOM.",
+          "attributes": [
+            {
+              "name": "route",
+              "description": "Current route value. Determines which page component should be dynamically loaded and rendered.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "route",
+                "description": "Current route string. Changing it updates the URL and re-renders the corresponding component.",
+                "type": "string"
+              }
+            ],
+            "slots": []
+          }
+        },
+        {
+          "name": "routes",
+          "description": "Container for multiple <route> elements. Should be placed inside <app-root> to define routing table."
+        },
+        {
+          "name": "route",
+          "description": "Defines a single route entry. Must have a 'value' attribute and a page component as its child.",
+          "attributes": [
+            {
+              "name": "value",
+              "description": "Path for this route (e.g., '/', '/about', '/notfound').",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "content",
+          "description": "Wrapper component used to structure page content. Typically used inside route components to group page layout and elements."
+        },
+        {
+          "name": "NavLink",
+          "description": "Navigation link component that displays a link with optional active state based on the current route.",
+          "attributes": [
+            {
+              "name": "to",
+              "description": "URL to navigate to when the link is clicked.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "KinderGarten",
+          "description": "Place where children of the component are rendered. There can be only one instance of this in the single component."
+        },
+        {
+          "name": "AppContent",
+          "description": "Container for the main content of the application. It is used inside the AppRoot component to define the layout and structure of the app's content."
+        },
+        {
+          "name": "HomePage",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "AddNewReport",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "DashBoard",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "SignIn",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "SignUp",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "ReportDetails",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "ReportsList",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "NavBar",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
