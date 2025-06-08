@@ -78,7 +78,7 @@ class ReactiveComponent extends HTMLElement {
  }
  constructor(attrs, root) {
  super();
- setNativeAttributes.call(this);
+ setNativeAttributes.call(this, attrs);
  if (this.constructor.name === CONST.appRootName) {
  this.constructedComponents = {};
  this.componentCounter = 0;
