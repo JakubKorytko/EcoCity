@@ -1,0 +1,28 @@
+<content>
+  <RenderIf condition="$shouldDisplayNavBar">
+    <nav>
+      <header>
+        <NavLink to="/">
+          <i class="fa fa-leaf" aria-hidden="true"></i> EcoCity
+        </NavLink>
+      </header>
+      <main>
+        <RenderIf condition="$currentPage.home">
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/reports">Reports</NavLink>
+          <NavLink to="/signin" class="green">Login</NavLink>
+          <NavLink to="/signup" class="empty">Register</NavLink>
+        </RenderIf>
+        <RenderIf condition="$currentPage.reports">
+          <NavLink to="/reports">Reports</NavLink>
+          <NavLink to="/dashboard">Dashboard</NavLink>
+          <NavLink to="/report/add" class="green">+ New Report</NavLink>
+        </RenderIf>
+        <RenderIf condition="$currentPage.dashboardOrNew">
+          <NavLink to="/reports">Reports</NavLink>
+          <NavLink to="/dashboard">Dashboard</NavLink>
+        </RenderIf>
+      </main>
+    </nav>
+  </RenderIf>
+</content>
