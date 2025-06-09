@@ -16,7 +16,7 @@ const routeNames = CONST.routes.reduce((acc, route) => {
  return acc;
 }, {});
 const getRouteFromRequest = (req) => {
- const path = req.url;
+ const path = req.url.split("?")[0];
  const startsWithExact = (prefix) =>
  path === prefix || path.startsWith(prefix + "/");
  if (startsWithExact(CONST.customRouteAliases.api)) return routeNames.api;
