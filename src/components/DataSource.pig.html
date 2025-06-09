@@ -1,0 +1,24 @@
+<content> </content>
+
+<script>
+  $B.firstRender = true;
+
+  if ($B.firstRender) {
+    $api("/reports", { method: "GET" }, "json").then(
+      (value) => ($H.reports = $$(value)),
+    );
+    $api("/users", { method: "GET" }, "json").then(
+      (value) => ($H.users = $$(value)),
+    );
+    $api("/comments", { method: "GET" }, "json").then(
+      (value) => ($H.comments = $$(value)),
+    );
+    $B.firstRender = false;
+  }
+</script>
+
+<style>
+  :host {
+    display: none;
+  }
+</style>

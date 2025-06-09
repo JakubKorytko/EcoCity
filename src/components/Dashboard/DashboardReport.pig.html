@@ -1,0 +1,34 @@
+<content></content>
+
+<script>
+  const { data } = $attrs;
+
+  const trElement = document.createElement("tr");
+  trElement.innerHTML = `
+        <td>${data.title}</td>
+        <td>${new Date(data.date).toLocaleDateString()}</td>
+        <td>${data.status}</td>
+        <td>${data.commentsCount + " comments" || "No comments"}</td>
+        <td>
+            <button class="view-details">View Details</button>
+            <button class="delete-report">Delete</button>
+        </td>
+    `;
+
+  $document.append(trElement);
+</script>
+
+<style>
+  :host {
+    display: contents;
+  }
+
+  td:last-of-type {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  td {
+    padding-bottom: 20px;
+  }
+</style>

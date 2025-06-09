@@ -1,0 +1,24 @@
+<content>
+  <main></main>
+</content>
+
+<script>
+  import { getRecentReportsArray } from "/modules/helpers.pig";
+
+  $H.observe("reports");
+  $H.observe("users");
+
+  const recentReports = getRecentReportsArray($H.reports, $H.users, 5);
+
+  for (const report of recentReports) {
+    const reportEl = $`<SingleReport ${{ data: report }} />`;
+    $element("main").append(reportEl);
+  }
+</script>
+
+<style>
+  main,
+  :host {
+    width: 100%;
+  }
+</style>

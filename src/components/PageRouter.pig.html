@@ -1,0 +1,21 @@
+<content> </content>
+
+<style>
+  :host {
+    display: none;
+  }
+</style>
+
+<script>
+  $H.route = $$(document.location.pathname);
+
+  const onPopState = async () => {
+    $H.route = document.location.pathname;
+  };
+
+  window.addEventListener("popstate", onPopState);
+
+  $onBeforeUpdate(() => {
+    window.removeEventListener("popstate", onPopState);
+  });
+</script>

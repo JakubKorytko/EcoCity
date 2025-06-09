@@ -1,0 +1,28 @@
+<content>
+  <DashboardCard type="total" />
+  <DashboardCard type="pending" />
+  <DashboardCard type="resolved" />
+</content>
+
+<script>
+  import { getReportsCount } from "/modules/helpers.pig";
+
+  $H.observe("reports");
+
+  const count = getReportsCount($H.reports);
+
+  $elements("DashboardCard").forEach((card) => {
+    const type = card.attrs.type;
+    if (count[type] !== undefined) {
+      card.pass({
+        count: count[type],
+      });
+    }
+  });
+</script>
+
+<style>
+  :host {
+    display: contents;
+  }
+</style>

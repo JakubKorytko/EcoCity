@@ -1,0 +1,76 @@
+<content>
+  <main>
+    <div>
+      <p>Unknown</p>
+      <output>??</output>
+    </div>
+    <img src="/public/images/reports/placeholder.png" alt="Report Icon" />
+  </main>
+</content>
+
+<script>
+  const types = {
+    total: {
+      label: "Total Reports",
+      icon: "/public/images/green_icons/document.svg",
+      iconBGColor: "#DBEAFE",
+    },
+    pending: {
+      label: "Pending Review",
+      icon: "/public/images/other_icons/clock.svg",
+      iconBGColor: "#FEF3C7",
+    },
+    resolved: {
+      label: "Resolved",
+      icon: "/public/images/green_icons/checkmark.svg",
+      iconBGColor: "var(--Secondary_color)",
+    },
+  };
+
+  const { type, count } = $attrs;
+
+  $element("main > div:first-of-type > p").textContent = types[type].label;
+  $element("main > div:first-of-type > output").textContent = count;
+  $element("main > img").src = types[type].icon;
+  $element("main > img").style.backgroundColor = types[type].iconBGColor;
+</script>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    width: 548px;
+    height: 148px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    main {
+      width: calc(100%);
+      height: calc(100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+      padding: 24px;
+
+      p {
+        margin: 0;
+      }
+
+      > div:first-of-type {
+        display: flex;
+        flex-direction: column;
+      }
+
+      img {
+        border-radius: 8px;
+        width: 54px;
+        height: 54px;
+        padding: 16px;
+      }
+    }
+  }
+</style>

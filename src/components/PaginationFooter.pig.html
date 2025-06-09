@@ -1,0 +1,47 @@
+<content>
+  <p>Showing <span>??</span> of <span>???</span> reports</p>
+  <div class="pagination-controls">
+    <button class="prev" disabled>Previous</button>
+    <section></section>
+    <button class="next">Next</button>
+  </div>
+</content>
+
+<style>
+  :host {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-direction: row;
+  }
+</style>
+
+<script>
+  const { page, totalPages, totalReports, reportsPerPage } = $attrs;
+
+  $element("p > span:first-of-type").textContent = String(
+    Math.min(reportsPerPage, totalReports),
+  );
+
+  let pages = totalPages;
+
+  while (pages > 0) {
+    const section = $element(".pagination-controls > section");
+    const pageButton = document.createElement("button");
+    pageButton.textContent = pages;
+    pageButton.className = "page-button";
+    pageButton.disabled = pages === page;
+    section.appendChild(pageButton);
+    pages--;
+  }
+
+  $element("p > span:last-of-type").textContent = totalReports;
+  $element(".prev").disabled = page <= 1;
+  $element(".next").disabled = page >= totalPages;
+</script>
