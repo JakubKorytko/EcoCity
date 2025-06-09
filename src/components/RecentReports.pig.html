@@ -1,0 +1,73 @@
+<content>
+  <main></main>
+</content>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+  }
+</style>
+
+<script>
+  $H.observe("reports");
+  $H.observe("users");
+
+  // Function to calculate relative time
+  function getTimeDifference(timestamp) {
+    const now = Date.now();
+    const diff = now - timestamp;
+
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) return `${days} day${days > 1 ? "s" : ""} ago`;
+    if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+    if (minutes > 0) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+    return `${seconds} second${seconds !== 1 ? "s" : ""} ago`;
+  }
+
+  // Create an array of recent reports with user info
+  const recentReportsArray = $H.reports
+    .sort((a, b) => {
+      // Sort by updatedAt if available, otherwise use createdAt
+      const timeA = a.updatedAt || a.createdAt;
+      const timeB = b.updatedAt || b.createdAt;
+      return timeB - timeA;
+    })
+    .slice(0, 3)
+    .map((report) => {
+      const user = $H.users.find((user) => user.id === report.authorId);
+      const timeReference = report.updatedAt || report.createdAt;
+
+      return {
+        author: user ? user.name : "Unknown",
+        avatarUrl: user ? user.avatar : null,
+        timeDifference: getTimeDifference(timeReference),
+        title: report.title,
+        description: report.description,
+        status: report.status,
+        image: report.image,
+      };
+    });
+
+  if (recentReportsArray.length > 0) {
+    const reports = [];
+
+    for (const report of recentReportsArray) {
+      const reportEl = $`<RecentReport ${{
+        data: report,
+      }} />`;
+      reports.push(reportEl);
+    }
+    $element("main").append(...reports);
+  } else {
+    $element("main").innerText = "No recent reports available.";
+  }
+</script>

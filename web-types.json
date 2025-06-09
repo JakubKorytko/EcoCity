@@ -191,7 +191,49 @@
           ]
         },
         {
+          "name": "HomePageCard",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
           "name": "NavBar",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "RecentReport",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "RecentReports",
           "description": "No description found",
           "attributes": [
             {

@@ -1,0 +1,116 @@
+<content>
+  <section>
+    <p class="badge">Unknown</p>
+  </section>
+  <section>
+    <h3>Title</h3>
+    <p>Description</p>
+    <section>
+      <div>
+        <img src="/public/images/avatars/placeholder.png" alt="Avatar" />
+        <span>User</span>
+      </div>
+      <time>Time difference</time>
+    </section>
+  </section>
+</content>
+
+<script>
+  const { data } = $attrs;
+
+  if (!data) throw out;
+
+  $element("section>h3").innerText = data.title;
+  $element("section:last-of-type>p").innerText = data.description;
+  $element("section:last-of-type>div>span").innerText = data.author;
+  $element("section:last-of-type>time").innerText = data.timeDifference;
+  $element("section:last-of-type>div>img").src =
+    data.avatarUrl || "/public/images/avatars/placeholder.png";
+  $element("section:first-of-type").style.backgroundImage =
+    `url(${data.image || "/public/images/reports/placeholder.png"})`;
+  $element(".badge").innerText = data.status || "Unknown";
+  $element(".badge").className =
+    `badge badge-${data.status?.toLowerCase() || "badge"}`;
+</script>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow:
+      0 1px 2px 0 rgba(0, 0, 0, 0.05),
+      0 0 0 0 rgba(0, 0, 0, 0),
+      0 0 0 0 rgba(0, 0, 0, 0);
+    width: 450px;
+    min-width: 0;
+    overflow: hidden;
+
+    > section:first-of-type {
+      background-image: url("/public/images/reports/placeholder.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      min-height: 192px;
+
+      .badge {
+        position: absolute;
+        right: 16px;
+        top: 16px;
+      }
+    }
+
+    > section:last-of-type {
+      padding: 24px 24px 48px;
+
+      h3 {
+        color: #1f2937;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 28px;
+        margin: 0;
+      }
+
+      p {
+        color: #4b5563;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px; /* 150% */
+        margin-top: 8px;
+        margin-bottom: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      section {
+        color: #4b5563;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px; /* 142.857% */
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        div {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 8px;
+        }
+
+        img {
+          border-radius: 9999px;
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+  }
+</style>

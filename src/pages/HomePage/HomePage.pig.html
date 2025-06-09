@@ -1,0 +1,83 @@
+<content>
+  <section>
+    <div>
+      <h1>Report Environmental Issues in Your Community</h1>
+      <p>
+        Join our platform to report and track environmental issues. Together, we
+        can make our city cleaner and safer.
+      </p>
+      <div>
+        <NavLink class="button green-button">Report an issue</NavLink>
+        <NavLink class="button empty-green-button">View reports</NavLink>
+      </div>
+    </div>
+    <img src="/public/images/homepage_section_1.png" alt="" />
+  </section>
+  <section>
+    <h2>How it works</h2>
+    <div>
+      <HomePageCard>
+        <img src="/public/images/green_circle_icons/camera.svg" />
+        <h3>Report Issues</h3>
+        <p>Submit environmental issues with photos and descriptions.</p>
+      </HomePageCard>
+      <HomePageCard>
+        <img src="/public/images/green_circle_icons/search.svg" />
+        <h3>Track Progress</h3>
+        <p>Monitor the status of your reported issues in real-time.</p>
+      </HomePageCard>
+      <HomePageCard>
+        <img src="/public/images/green_circle_icons/chat.svg" />
+        <h3>Community Engagement</h3>
+        <p>Engage with other users and local authorities.</p>
+      </HomePageCard>
+    </div>
+  </section>
+  <section>
+    <h2>Recent Reports</h2>
+    <RecentReports />
+  </section>
+  <section>
+    <h2>Ready to Make a Difference?</h2>
+    <p>
+      Join thousands of citizens who are actively contributing to making our
+      environment cleaner and safer.
+    </p>
+    <div>
+      <NavLink class="button white-button">Create Account</NavLink>
+      <NavLink class="button empty-white-button">View Reports</NavLink>
+    </div>
+  </section>
+  <footer>
+    <div>
+      <div>
+        <img src="/public/images/favicon.svg" />
+        <span>EcoCity</span>
+        <span>Making our city cleaner and safer together.</span>
+      </div>
+      <span>&copy; 2025 EcoCity. All rights reserved.</span>
+    </div>
+  </footer>
+</content>
+
+<script>
+  $B.firstRender = true;
+
+  if ($B.firstRender) {
+    $api("/reports", { method: "GET" }, "json").then(
+      (value) => ($H.reports = $$(value)),
+    );
+    $api("/users", { method: "GET" }, "json").then(
+      (value) => ($H.users = $$(value)),
+    );
+    $B.firstRender = false;
+  }
+</script>
+
+<!--suppress JSUnusedGlobalSymbols -->
+<script content="description">
+  export default {
+    name: "HomePage",
+    description: "Home page",
+  };
+</script>

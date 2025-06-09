@@ -3,6 +3,9 @@
 
 :root {
   --Primary_color: #059669;
+  --Secondary_color: #d1fae5;
+  --Water_bg: #c7f4fe;
+  --Water_fg: #006aff;
 }
 
 * {
@@ -11,4 +14,64 @@
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+}
+
+.button {
+  display: flex;
+  height: 40px;
+  padding: 9px 17px 9px 17px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.empty-green-button {
+  border: 1px solid var(--Primary_color);
+  color: var(--Primary_color);
+  background: rgba(255, 255, 255, 0);
+}
+
+.empty-white-button {
+  border: 1px solid white;
+  color: white;
+  background: rgba(255, 255, 255, 0);
+}
+
+.green-button {
+  border: none;
+  color: #fff;
+  background: var(--Primary_color);
+}
+
+.white-button {
+  border: none;
+  background: #fff;
+  color: var(--Primary_color);
+}
+
+.badge {
+  display: flex;
+  padding: 3px 24px;
+  width: fit-content;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  line-height: 20px;
+  background: #f4f4f4;
+}
+
+.badge-new {
+  background: var(--Water_bg, #c7f4fe);
+  color: var(--Water_fg, #006aff);
+}
+
+.badge-pending {
+  background: #fef3c7;
+  color: #92400e;
 }
