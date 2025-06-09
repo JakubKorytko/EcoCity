@@ -10,10 +10,17 @@
         <td>${data.status}</td>
         <td>${data.commentsCount + " comments" || "No comments"}</td>
         <td>
-            <button class="view-details">View Details</button>
             <button class="delete-report">Delete</button>
         </td>
     `;
+
+  const navLink = $`<NavLink ${{to: `/report?id=${data.id}`}}/>`;
+  navLink.textContent = "View Details";
+
+  trElement.querySelector("td:last-of-type").prepend(navLink);
+
+  // const navLink =             <NavLink to="/report?id=${data.id}" class="view-details">View Details</NavLink>
+
 
   $document.append(trElement);
 </script>

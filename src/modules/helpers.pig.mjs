@@ -44,6 +44,7 @@ function getRecentReportsArray(reports, users, count = 3) {
       const timeReference = report.updatedAt || report.createdAt;
 
       return {
+        id: report.id,
         author: user ? user.name : "Unknown",
         avatarUrl: user ? user.avatar : null,
         timeDifference: getTimeDifference(timeReference),
