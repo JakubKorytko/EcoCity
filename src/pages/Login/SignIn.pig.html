@@ -1,1 +1,63 @@
-<content> Sign In </content>
+<content>
+  <main>
+    <header>
+      <img src="/public/images/green_icons/shield.svg" />
+      <h2>Sign in to your account</h2>
+    </header>
+    <form>
+      <section>
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+      </section>
+      <section>
+        <div>
+          <input type="checkbox" id="remember-me" name="remember-me" />
+          <label for="remember-me">Remember me</label>
+        </div>
+        <NavLink to="/forgot-password" class="link"> Forgot password? </NavLink>
+      </section>
+
+      <button type="submit" class="button green-button">Sign In</button>
+
+      <p>
+        Don't have an account?
+        <NavLink to="/signup" class="link">Sign up now</NavLink>
+      </p>
+      <NavLink to="/" class="link">Back to Home</NavLink>
+    </form>
+  </main>
+</content>
+
+<style>
+  @import "/public/styles/globals.css";
+  @import "/public/styles/signinout.pig.css";
+
+  p {
+    margin: 0;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  form {
+    section {
+      &:first-of-type {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      &:nth-of-type(2) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+  }
+</style>

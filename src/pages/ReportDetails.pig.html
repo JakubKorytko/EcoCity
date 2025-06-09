@@ -1,1 +1,35 @@
-<content> Reports Details </content>
+<content>
+  <main>
+    <ReportDetailsHeader />
+    <section>
+      <ReportDetailsContent />
+      <ReportDetailsAside />
+    </section>
+  </main>
+</content>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    main {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+
+      > section {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  }
+</style>

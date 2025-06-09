@@ -48,31 +48,8 @@
       <NavLink class="button empty-white-button">View Reports</NavLink>
     </div>
   </section>
-  <footer>
-    <div>
-      <div>
-        <img src="/public/images/favicon.svg" />
-        <span>EcoCity</span>
-        <span>Making our city cleaner and safer together.</span>
-      </div>
-      <span>&copy; 2025 EcoCity. All rights reserved.</span>
-    </div>
-  </footer>
+  <PageFooter />
 </content>
-
-<script>
-  $B.firstRender = true;
-
-  if ($B.firstRender) {
-    $api("/reports", { method: "GET" }, "json").then(
-      (value) => ($H.reports = $$(value)),
-    );
-    $api("/users", { method: "GET" }, "json").then(
-      (value) => ($H.users = $$(value)),
-    );
-    $B.firstRender = false;
-  }
-</script>
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script content="description">
