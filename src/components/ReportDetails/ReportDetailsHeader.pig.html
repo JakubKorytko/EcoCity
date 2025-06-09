@@ -15,6 +15,20 @@
   </header>
 </content>
 
+<script>
+  const {
+    data: { report, user, comments },
+  } = $attrs;
+
+  $element("div>h2").innerText = report.title || "Report Title";
+  $element("div>section>span:nth-child(1)").innerText =
+    `Reported on ${new Date(report.createdAt).toLocaleDateString()}`;
+  $element("div>section>span:nth-child(2)").innerText =
+    `By ${user.name || "Unknown User"}`;
+  $element("div>section>span:nth-child(3)").innerText =
+    report.status || "Unknown Status";
+</script>
+
 <style>
   :host {
     display: contents;

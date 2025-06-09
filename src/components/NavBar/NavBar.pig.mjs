@@ -5,7 +5,7 @@ const excludedRoutes = ["/signin", "/signup"];
 const updateCurrentPage = () =>
   ($B.currentPage = {
     home: $H.route === "/",
-    reports: $H.route === "/reports",
+    reports: $H.route === "/reports" || $H.route === "/report",
     dashboardOrNew: $H.route === "/dashboard" || $H.route === "/report/add",
   });
 

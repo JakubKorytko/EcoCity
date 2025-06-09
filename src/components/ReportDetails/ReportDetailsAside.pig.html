@@ -25,16 +25,65 @@
 <style>
   :host {
     display: contents;
-  }
 
-  aside {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-  }
+    p,
+    h3,
+    h4 {
+      margin: 0;
+    }
 
-  img {
-    width: 24px;
-    height: 24px;
+    aside {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+
+      > section {
+        border-radius: 8px;
+        background: #fff;
+        box-shadow:
+          0 1px 2px 0 rgba(0, 0, 0, 0.05),
+          0 0 0 0 rgba(0, 0, 0, 0),
+          0 0 0 0 rgba(0, 0, 0, 0);
+        padding: 24px;
+      }
+
+      & > section:first-of-type {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        div {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 10px;
+          margin-top: 10px;
+
+          img {
+            width: 32px;
+            height: 32px;
+          }
+        }
+      }
+
+      & > section:last-of-type {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        img {
+          width: auto;
+          height: 200px;
+          border-radius: 8px;
+        }
+
+        p {
+          color: #4b5563;
+          font-size: 14px;
+          line-height: 20px; /* 142.857% */
+        }
+      }
+    }
   }
 </style>
