@@ -10,30 +10,43 @@
         <input type="email" id="email" name="email" required />
 
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" required />
+        <div>
+          <input type="password" id="password" name="password" required />
+          <img src="/public/images/other_icons/eye.svg" id="eye" class="eye" />
+        </div>
       </section>
       <section>
         <div>
           <input type="checkbox" id="remember-me" name="remember-me" />
           <label for="remember-me">Remember me</label>
         </div>
-        <NavLink to="/forgot-password" class="link"> Forgot password? </NavLink>
+        <NavLink to="/forgot-password" class="link forgot">
+          Forgot password?
+        </NavLink>
       </section>
 
-      <button type="submit" class="button green-button">Sign In</button>
+      <div>
+        <img src="/public/images/green_icons/lock.svg" />
+        <button type="submit" class="button green-button" id="signIn">
+          Sign In
+        </button>
+      </div>
 
       <p>
-        Don't have an account?
+        <span>Don't have an account?</span>
         <NavLink to="/signup" class="link">Sign up now</NavLink>
       </p>
-      <NavLink to="/" class="link">Back to Home</NavLink>
+      <NavLink to="/" class="link backToHome">Back to Home</NavLink>
     </form>
   </main>
 </content>
 
 <style>
-  @import "/public/styles/globals.css";
   @import "/public/styles/signinout.pig.css";
+
+  main {
+    width: 450px;
+  }
 
   p {
     margin: 0;
@@ -57,7 +70,59 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        > div {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
       }
     }
   }
+
+  div:has(#password),
+  div:has(#signIn) {
+    position: relative;
+    align-self: stretch;
+    display: flex;
+  }
+
+  div:has(#signIn) {
+    margin-top: 12px;
+  }
+
+  #signIn {
+    width: 100%;
+  }
+
+  #password {
+    padding-right: 40px;
+  }
+
+  div:has(#signIn) img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  div:has(#signIn) img {
+    left: 15px;
+  }
 </style>
+
+<script>
+  import { transition } from "/modules/helpers.pig";
+
+  $B.isPasswordVisible = false;
+
+  $element("#eye").on("click", () => {
+    $B.isPasswordVisible = !$B.isPasswordVisible;
+    const passwordInput = $element("#password");
+    passwordInput.type = $B.isPasswordVisible ? "text" : "password";
+    transition(() => {
+      $element("#eye").src = $B.isPasswordVisible
+        ? "/public/images/other_icons/eye-slash.svg"
+        : "/public/images/other_icons/eye.svg";
+    });
+  });
+</script>

@@ -57,10 +57,19 @@ function getRecentReportsArray(reports, users, count = 3) {
     });
 }
 
+function transition(callback) {
+  if (document.startViewTransition) {
+    return document.startViewTransition(callback);
+  }
+
+  return callback();
+}
+
 export {
   sleep,
   getUrlParams,
   getReportsCount,
   getTimeDifference,
   getRecentReportsArray,
+  transition,
 };

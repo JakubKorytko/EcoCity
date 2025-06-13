@@ -6,7 +6,7 @@
     </div>
     <div>
       <span></span>
-      <i class="fa fa-times" aria-hidden="true"></i>
+      <img src="/public/images/other_icons/xmark.svg" />
     </div>
   </div>
   <p>No message provided.</p>
@@ -48,14 +48,16 @@
         align-items: center;
         gap: 6px;
 
-        i {
-          font-size: 1.2rem;
-          cursor: pointer;
+        &:nth-child(2) {
+          img {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+          }
         }
       }
 
       color: #000;
-
       font-size: 12px;
       font-weight: 400;
       line-height: 20px;
@@ -124,7 +126,7 @@
     }, 300);
   };
 
-  $element("div>i").on("click", hideAndRemove);
+  $element("div:nth-of-type(2)>img").on("click", hideAndRemove);
 
   $B.opened = $$(Date.now());
   $B.interval = setInterval(() => {

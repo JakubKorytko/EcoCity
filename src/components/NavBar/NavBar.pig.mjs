@@ -2,19 +2,26 @@ import { sleep } from "/modules/helpers.pig";
 
 const excludedRoutes = ["/signin", "/signup"];
 
-const updateCurrentPage = () =>
-  ($B.currentPage = {
-    home: $H.route === "/",
-    reports: $H.route === "/reports" || $H.route === "/report",
-    dashboardOrNew: $H.route === "/dashboard" || $H.route === "/report/add",
-  });
+$H.observe("route");
+
+if (!$H.route) {
+  throw out;
+}
+
+const updateCurrentPage = (newRoute) => {
+  const route = newRoute || $H.route;
+
+  $B.currentPage = {
+    home: route === "/",
+    reports: route === "/reports" || route === "/report",
+    dashboardOrNew: route === "/dashboard" || route === "/report/add",
+  };
+};
 
 const hiddenNavBarStyles = [
   ["margin-top", "-72px"],
   ["display", "none"],
 ];
-
-$H.observe("route");
 
 $B.firstRender = $$(true);
 
@@ -36,6 +43,7 @@ if ($B.firstRender) {
       await sleep(300);
       this.style.setProperty(...hiddenNavBarStyles.at(1));
     } else if (!$B.shouldDisplayNavBar && shouldDisplayNavBarBasedOnNewRoute) {
+      updateCurrentPage();
       this.style.removeProperty("display");
       requestAnimationFrame(() => this.style.removeProperty("margin-top"));
     } else {

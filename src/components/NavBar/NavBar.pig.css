@@ -55,6 +55,13 @@ NavLink.active:not(header *) {
 
       NavLink {
         display: flex;
+
+        &:not(:is(.button, .active)) {
+          &:hover {
+            color: #0fc88f;
+          }
+          transition: color 0.3s;
+        }
       }
     }
   }

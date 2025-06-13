@@ -22,27 +22,41 @@
         <input type="email" id="email" name="email" required />
 
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" required />
+        <div>
+          <input type="password" id="password" name="password" required />
+          <img src="/public/images/other_icons/eye.svg" class="eye" />
+        </div>
 
         <label for="confirm-password">Confirm Password</label>
-        <input
-          type="password"
-          id="confirm-password"
-          name="confirm-password"
-          required
-        />
+        <div>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            required
+          />
+          <img src="/public/images/other_icons/eye.svg" class="eye" />
+        </div>
       </section>
 
-      <button type="submit" class="button green-button">Create Account</button>
+      <div>
+        <img src="/public/images/other_icons/user-plus.svg" />
+        <button type="submit" class="button green-button create-acc">
+          Create Account
+        </button>
+      </div>
 
-      <NavLink to="/" class="link">Back to Home</NavLink>
+      <NavLink to="/" class="link backToHome">Back to Home</NavLink>
     </form>
   </main>
 </content>
 
 <style>
-  @import "/public/styles/globals.css";
   @import "/public/styles/signinout.pig.css";
+
+  main {
+    width: 450px;
+  }
 
   p {
     margin: 0;
@@ -55,6 +69,9 @@
   }
 
   form {
+    display: flex;
+    flex-direction: column;
+
     section {
       display: flex;
       flex-direction: column;
@@ -62,14 +79,69 @@
       > div {
         display: flex;
         flex-direction: row;
+        gap: 16px;
 
         > div {
-          flex: 1;
           display: flex;
           flex-direction: column;
           gap: 4px;
+
+          > input {
+            width: 100%;
+          }
         }
       }
     }
   }
+
+  #password,
+  #confirm-password {
+    padding-right: 40px;
+  }
+
+  div:has(.eye) {
+    position: relative;
+  }
+
+  div:has(.create-acc) {
+    margin-top: 16px;
+    color: #fff;
+    position: relative;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    width: 100%;
+
+    button {
+      width: 100%;
+    }
+
+    img {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 15px;
+    }
+  }
 </style>
+
+<script>
+  import { transition } from "/modules/helpers.pig";
+
+  $B.isPasswordVisible = [];
+
+  $elements(".eye").forEach((eye, index) => {
+    $B.isPasswordVisible[index] = false;
+    eye.addEventListener("click", () => {
+      $B.isPasswordVisible[index] = !$B.isPasswordVisible[index];
+      const passwordInput = eye.previousElementSibling;
+
+      transition(() => {
+        passwordInput.type = $B.isPasswordVisible[index] ? "text" : "password";
+        eye.src = $B.isPasswordVisible[index]
+          ? "/public/images/other_icons/eye-slash.svg"
+          : "/public/images/other_icons/eye.svg";
+      });
+    });
+  });
+</script>
