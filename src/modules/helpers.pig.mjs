@@ -31,6 +31,8 @@ function getTimeDifference(timestamp) {
 }
 
 function getRecentReportsArray(reports, users, count = 3) {
+  if (!Array.isArray(reports) || !Array.isArray(users)) return [];
+
   return reports
     .sort((a, b) => {
       // Sort by updatedAt if available, otherwise use createdAt

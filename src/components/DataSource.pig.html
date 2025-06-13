@@ -1,6 +1,8 @@
 <content> </content>
 
 <script>
+  import CookieManager from "/modules/CookieManager.pig";
+
   $B.firstRender = true;
 
   if ($B.firstRender) {
@@ -13,6 +15,31 @@
     $api("/comments", { method: "GET" }, "json").then(
       (value) => ($H.comments = $$(value)),
     );
+    $api(
+      "/session",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          token: CookieManager.get("session"),
+        }),
+      },
+      "json",
+    )
+      .then((value) => {
+        if (value && value.token) {
+          $H.user = value;
+          $H.isAuthenticated = true;
+        } else {
+          $H.user = { email: "", name: "", role: "guest", token: "" };
+          $H.isAuthenticated = false;
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching session:", error);
+        $H.user = { email: "", name: "", role: "guest", token: "" };
+        $H.isAuthenticated = false;
+      });
+
     $B.firstRender = false;
 
     window.ecoCityToastManager = {

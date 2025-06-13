@@ -31,7 +31,7 @@
       }} />`;
       reports.push(reportEl);
     }
-    $element("main").append(...reports);
+    $element("main").replaceChildren(...reports);
   } else {
     $element("main").innerText = "No recent reports available.";
   }

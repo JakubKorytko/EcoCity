@@ -110,6 +110,7 @@
 
 <script>
   import { transition } from "/modules/helpers.pig";
+  import CookieManager from "/modules/CookieManager.pig";
 
   $B.isPasswordVisible = false;
 
@@ -158,7 +159,9 @@
           message: `Welcome back, ${response.email}!`,
         });
 
+        CookieManager.set("session", response.token);
         $H.user = response;
+        $H.isAuthenticated = true;
         $navigate("/");
       })
       .catch((error) => {
