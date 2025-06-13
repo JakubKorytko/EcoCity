@@ -434,7 +434,6 @@ function createStateIfMissing(
  asRef,
  avoidClone,
  root,
- viaSetter = false,
 ) {
  if (!root.globalState[componentName]) {
  root.globalState[componentName] = {};
@@ -445,7 +444,6 @@ function createStateIfMissing(
  asRef,
  avoidClone,
  );
- if (viaSetter) {
  const component = root.constructedComponents[componentName];
  const renderIfs = component?.shadowRoot.querySelectorAll("render-if");
  for (const renderIf of renderIfs) {
@@ -460,7 +458,6 @@ function createStateIfMissing(
  const isDependent = parsedCondition === key;
  if (isDependent) {
  renderIf._updateFromAttribute();
- }
  }
  }
  }
