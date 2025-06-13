@@ -9,13 +9,12 @@
       </p>
       <div>
         <img src="/public/images/reports/placeholder.png" alt="placeholder" />
-        <img src="/public/images/reports/placeholder.png" alt="placeholder" />
       </div>
     </section>
     <section>
       <h3>Comments</h3>
-      <textarea placeholder="Add a comment..."></textarea>
-      <button>Post Comment</button>
+      <textarea>Add a comment...</textarea>
+      <button class="button green-button">Post Comment</button>
       <div></div>
     </section>
   </div>
@@ -51,6 +50,8 @@
 </script>
 
 <style>
+  @import "/public/styles/globals.css";
+
   :host {
     display: contents;
 
@@ -61,9 +62,17 @@
       margin: 0;
     }
 
+    h3 {
+      color: #000;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 28px;
+    }
+
     > div {
       display: flex;
       flex-direction: column;
+      flex-grow: 1;
       gap: 30px;
 
       section {
@@ -77,14 +86,26 @@
         padding: 24px;
 
         &:first-of-type {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          p {
+            color: #374151;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+          }
+
           > div {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
             margin-top: 16px;
+            gap: 20px;
 
             img {
-              width: 45%;
+              max-width: 45%;
+              max-height: 200px;
               height: auto;
               border-radius: 8px;
             }
@@ -92,6 +113,14 @@
         }
 
         &:nth-of-type(2) {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+
+          button {
+            width: fit-content;
+          }
+
           textarea {
             width: 100%;
             height: 100px;
@@ -99,20 +128,6 @@
             border: 1px solid #d1d5db;
             padding: 10px;
             resize: none;
-          }
-
-          button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-
-            &:hover {
-              background-color: #1d4ed8;
-            }
           }
 
           > div {

@@ -12,19 +12,38 @@
         <form>
           <div>
             <label for="title">Report Title *</label>
-            <input type="text" id="title" name="title" required />
+            <input
+              type="text"
+              id="title"
+              name="title"
+              required
+              placeholder="Enter a clear title for your report"
+            />
           </div>
           <div>
             <label for="location">Location *</label>
-            <input type="text" id="location" name="location" required />
+            <input
+              type="text"
+              id="location"
+              name="location"
+              required
+              placeholder="Enter location"
+            />
           </div>
           <div>
             <label for="description">Description *</label>
-            <textarea id="description" name="description" required></textarea>
+            <textarea
+              id="description"
+              rows="5"
+              name="description"
+              required
+              placeholder="Provide detailed description of the environmental issue"
+            ></textarea>
           </div>
           <div>
-            <label for="image">Photos</label>
-            <input type="file" id="image" name="image" accept="image/*" />
+            <UploadFile />
+            <!--            <label for="image">Photos</label>-->
+            <!--            <input type="file" id="image" name="image" accept="image/*" />-->
           </div>
         </form>
         <div>
@@ -40,16 +59,20 @@
 <style>
   @import "/public/styles/globals.css";
 
+  input[type="text"] {
+    width: 100%;
+  }
+
   :host {
     width: 100%;
     min-height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
     main {
       display: flex;
       width: 100%;
-      min-height: calc(100% - 145px);
       justify-content: center;
       align-items: center;
       flex-shrink: 0;

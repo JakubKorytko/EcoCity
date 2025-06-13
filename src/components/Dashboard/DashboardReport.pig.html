@@ -2,30 +2,39 @@
 
 <script>
   const { data } = $attrs;
-
   const trElement = document.createElement("tr");
   trElement.innerHTML = `
         <td>${data.title}</td>
         <td>${new Date(data.date).toLocaleDateString()}</td>
-        <td>${data.status}</td>
+        <td class="badge badge-${data.status?.toLowerCase() || "badge"}">${data.status}</td>
         <td>${data.commentsCount + " comments" || "No comments"}</td>
         <td>
-            <button class="delete-report">Delete</button>
+            <img
+                src="/public/images/other_icons/edit.svg"
+                alt="Edit Icon"
+                id="edit"
+            />
         </td>
     `;
 
-  const navLink = $`<NavLink ${{to: `/report?id=${data.id}`}}/>`;
-  navLink.textContent = "View Details";
+  const navLink = $`<NavLink ${{ to: `/report?id=${data.id}` }}/>`;
+  navLink.innerHTML = `<img src="/public/images/other_icons/eye.svg" alt="View" />`;
 
   trElement.querySelector("td:last-of-type").prepend(navLink);
-
-  // const navLink =             <NavLink to="/report?id=${data.id}" class="view-details">View Details</NavLink>
-
-
   $document.append(trElement);
+
+  $element("img#edit").on("click", () => {
+    window.ecoCityToastManager.show({
+      type: "info",
+      title: "Edit Report",
+      message: "This feature is not implemented yet.",
+    });
+  });
 </script>
 
 <style>
+  @import "/public/styles/globals.css";
+
   :host {
     display: contents;
   }
@@ -37,5 +46,9 @@
 
   td {
     padding-bottom: 20px;
+  }
+
+  #edit {
+    cursor: pointer;
   }
 </style>

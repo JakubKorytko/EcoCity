@@ -1,7 +1,7 @@
 <content>
   <header>
     <div>
-      <h2>Illegal Dumping at River Park</h2>
+      <h3>Illegal Dumping at River Park</h3>
       <section>
         <span> Reported on Jan 15, 2025</span>
         <span> By John Smith </span>
@@ -9,8 +9,8 @@
       </section>
     </div>
     <div>
-      <button>Edit</button>
-      <button>Update Status</button>
+      <button class="button gray-button">Edit</button>
+      <button class="button green-button">Update Status</button>
     </div>
   </header>
 </content>
@@ -20,16 +20,20 @@
     data: { report, user, comments },
   } = $attrs;
 
-  $element("div>h2").innerText = report.title || "Report Title";
+  $element("div>h3").innerText = report.title || "Report Title";
   $element("div>section>span:nth-child(1)").innerText =
     `Reported on ${new Date(report.createdAt).toLocaleDateString()}`;
   $element("div>section>span:nth-child(2)").innerText =
     `By ${user.name || "Unknown User"}`;
   $element("div>section>span:nth-child(3)").innerText =
     report.status || "Unknown Status";
+  $element("div>section>span:nth-child(3)").className =
+    `badge badge-${report.status?.toLowerCase() || "badge"}`;
 </script>
 
 <style>
+  @import "/public/styles/globals.css";
+
   :host {
     display: contents;
   }
@@ -37,14 +41,17 @@
   header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     padding: 20px;
     border-radius: 8px;
+    background: #fff;
+    box-shadow:
+      0 1px 2px 0 rgba(0, 0, 0, 0.05),
+      0 0 0 0 rgba(0, 0, 0, 0),
+      0 0 0 0 rgba(0, 0, 0, 0);
 
-    h2 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 600;
+    h3 {
+      color: #000;
+      font-weight: 400;
     }
 
     div {
@@ -56,17 +63,15 @@
         flex-direction: column;
       }
 
-      button {
-        padding: 10px 15px;
-        background-color: #3b82f6;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-
-        &:hover {
-          background-color: #2563eb;
-        }
+      > section {
+        color: #4b5563;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
       }
     }
   }

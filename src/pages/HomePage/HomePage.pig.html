@@ -1,59 +1,63 @@
 <content>
-  <section>
-    <div>
-      <h1>Report Environmental Issues in Your Community</h1>
+  <main>
+    <section>
+      <div>
+        <h1>Report Environmental Issues in Your Community</h1>
+        <p>
+          Join our platform to report and track environmental issues. Together,
+          we can make our city cleaner and safer.
+        </p>
+        <div>
+          <NavLink to="/report/add" class="button green-button"
+            >Report an issue</NavLink
+          >
+          <NavLink to="/reports" class="button empty-green-button"
+            >View reports</NavLink
+          >
+        </div>
+      </div>
+      <img src="/public/images/homepage_section_1.png" alt="" />
+    </section>
+    <section>
+      <h2>How it works</h2>
+      <div>
+        <HomePageCard>
+          <img src="/public/images/green_circle_icons/camera.svg" />
+          <h3>Report Issues</h3>
+          <p>Submit environmental issues with photos and descriptions.</p>
+        </HomePageCard>
+        <HomePageCard>
+          <img src="/public/images/green_circle_icons/search.svg" />
+          <h3>Track Progress</h3>
+          <p>Monitor the status of your reported issues in real-time.</p>
+        </HomePageCard>
+        <HomePageCard>
+          <img src="/public/images/green_circle_icons/chat.svg" />
+          <h3>Community Engagement</h3>
+          <p>Engage with other users and local authorities.</p>
+        </HomePageCard>
+      </div>
+    </section>
+    <section>
+      <h2>Recent Reports</h2>
+      <RecentReports />
+    </section>
+    <section>
+      <h2>Ready to Make a Difference?</h2>
       <p>
-        Join our platform to report and track environmental issues. Together, we
-        can make our city cleaner and safer.
+        Join thousands of citizens who are actively contributing to making our
+        environment cleaner and safer.
       </p>
       <div>
-        <NavLink to="/report/add" class="button green-button"
-          >Report an issue</NavLink
+        <NavLink to="/signup" class="button white-button-primary"
+          >Create Account</NavLink
         >
-        <NavLink to="/reports" class="button empty-green-button"
-          >View reports</NavLink
+        <NavLink to="/reports" class="button empty-white-button"
+          >View Reports</NavLink
         >
       </div>
-    </div>
-    <img src="/public/images/homepage_section_1.png" alt="" />
-  </section>
-  <section>
-    <h2>How it works</h2>
-    <div>
-      <HomePageCard>
-        <img src="/public/images/green_circle_icons/camera.svg" />
-        <h3>Report Issues</h3>
-        <p>Submit environmental issues with photos and descriptions.</p>
-      </HomePageCard>
-      <HomePageCard>
-        <img src="/public/images/green_circle_icons/search.svg" />
-        <h3>Track Progress</h3>
-        <p>Monitor the status of your reported issues in real-time.</p>
-      </HomePageCard>
-      <HomePageCard>
-        <img src="/public/images/green_circle_icons/chat.svg" />
-        <h3>Community Engagement</h3>
-        <p>Engage with other users and local authorities.</p>
-      </HomePageCard>
-    </div>
-  </section>
-  <section>
-    <h2>Recent Reports</h2>
-    <RecentReports />
-  </section>
-  <section>
-    <h2>Ready to Make a Difference?</h2>
-    <p>
-      Join thousands of citizens who are actively contributing to making our
-      environment cleaner and safer.
-    </p>
-    <div>
-      <NavLink to="/signup" class="button white-button">Create Account</NavLink>
-      <NavLink to="/reports" class="button empty-white-button"
-        >View Reports</NavLink
-      >
-    </div>
-  </section>
+    </section>
+  </main>
   <PageFooter />
 </content>
 

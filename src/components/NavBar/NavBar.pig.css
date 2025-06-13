@@ -8,8 +8,8 @@ NavLink.active:not(header *) {
   display: flex;
   position: relative;
   width: 100%;
-  height: 48px;
-  padding: 12px 0;
+  height: 72px;
+  padding: 14px 0;
   justify-content: center;
   align-items: center;
   background: #fff;

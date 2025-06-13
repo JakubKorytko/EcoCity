@@ -1,11 +1,11 @@
 <content>
   <main>
     <section>
-      <h2>Environmental Reports</h2>
+      <h3>Environmental Reports</h3>
       <div>
         <input type="search" placeholder="Search reports..." />
-        <button>In this week</button>
-        <button>Any Status</button>
+        <button class="button white-button">In this week</button>
+        <button class="button white-button">Any Status</button>
       </div>
       <section>
         <ReportsListComponent />
@@ -19,14 +19,18 @@
 </content>
 
 <style>
+  @import "/public/styles/globals.css";
+
   :host {
     width: 100%;
     min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     main {
       width: 100%;
-      min-height: calc(100% - 145px);
-      padding: 30px 0;
+      padding: 50px 0;
       display: flex;
       align-items: center;
       flex-direction: column;
@@ -35,6 +39,7 @@
       > section {
         display: flex;
         flex-direction: column;
+        gap: 32px;
         width: 70%;
 
         > div {

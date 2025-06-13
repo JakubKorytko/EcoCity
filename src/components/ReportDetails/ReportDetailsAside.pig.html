@@ -1,28 +1,32 @@
 <content>
   <aside>
     <section>
-      <h3>Status Timeline</h3>
+      <h4>Status Timeline</h4>
       <div>
         <img
           src="/public/images/green_circle_icons/camera.svg"
           alt="camera icon"
         />
         <section>
-          <h4>Reported</h4>
+          <p>Reported</p>
           <p>Jan 15, 2025</p>
         </section>
       </div>
     </section>
     <section>
-      <h3>Location</h3>
+      <h4>Location</h4>
       <img src="/public/images/avatars/placeholder.png" alt="placeholder" />
-      <p>River Park, North Section</p>
-      <p>Coordinates: 51.5074° N, 0.1278° W</p>
+      <div>
+        <p>River Park, North Section</p>
+        <p>Coordinates: 51.5074° N, 0.1278° W</p>
+      </div>
     </section>
   </aside>
 </content>
 
 <style>
+  @import "/public/styles/globals.css";
+
   :host {
     display: contents;
 
@@ -32,8 +36,11 @@
       margin: 0;
     }
 
+    h4 {
+      font-weight: 400;
+    }
+
     aside {
-      width: 30%;
       display: flex;
       flex-direction: column;
       gap: 30px;
@@ -60,6 +67,20 @@
           gap: 10px;
           margin-top: 10px;
 
+          p:first-child {
+            color: #000;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+          }
+
+          p:last-child {
+            color: #4b5563;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+          }
+
           img {
             width: 32px;
             height: 32px;
@@ -70,7 +91,7 @@
       & > section:last-of-type {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 15px;
 
         img {
           width: auto;
@@ -78,10 +99,18 @@
           border-radius: 8px;
         }
 
-        p {
+        p:first-child {
+          color: #374151;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 24px;
+        }
+
+        p:last-child {
           color: #4b5563;
           font-size: 14px;
-          line-height: 20px; /* 142.857% */
+          font-weight: 400;
+          line-height: 20px;
         }
       }
     }

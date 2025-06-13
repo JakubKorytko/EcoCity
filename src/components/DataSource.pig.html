@@ -14,6 +14,18 @@
       (value) => ($H.comments = $$(value)),
     );
     $B.firstRender = false;
+
+    window.ecoCityToastManager = {
+      openedToastsHeight: 0,
+      show: ({ title, type, message, time = 3000 }) => {
+        const toast = $`<ToastComponent ${{ title, type, message }} />`;
+
+        document.body.append(toast);
+        setTimeout(() => {
+          toast.removeToast();
+        }, time);
+      },
+    };
   }
 </script>
 
