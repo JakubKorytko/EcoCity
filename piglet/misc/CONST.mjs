@@ -218,31 +218,6 @@ export default {
  "setup.mjs",
  ]),
  },
- parserStrings: {
- exportBeforeScript: (isAsync) => `
- export default ${isAsync ? "async" : ""} function({
- $attrs,
- $onBeforeUpdate,
- $onAfterUpdate,
- $element,
- $elements,
- $reason,
- $,
- $P,
- $B,
- $$,
- $$P,
- $H,
- $$H,
- $this,
- $document,
- out,
- $navigate,
- $api,
- $types,
- }) {
- `,
- },
  defaultWebType: (fileName) => ({
  name: path.basename(fileName, ".pig.html"),
  description: "No description found",
@@ -363,5 +338,8 @@ export default {
  target: "jsconfig.json",
  },
  ],
+ },
+ parserRegex: function () {
+ return new RegExp(/@Parser\s+(?<name>[a-zA-Z_$][0-9a-zA-Z_$]+)(.*);/g);
  },
 };

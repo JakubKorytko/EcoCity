@@ -10,7 +10,12 @@ import CONST from "@Piglet/browser/CONST";
 import { buildComponentTree } from "@Piglet/browser/tree";
 import ReactiveDummyComponent from "@Piglet/browser/classes/ReactiveDummyComponent";
 import Herd from "@Piglet/browser/classes/Herd";
-const _routes = routes ?? {};
+let Parser;
+const RouteEvent = function (detail, type) {
+ return new CustomEvent(type, {
+ detail,
+ });
+};
 class AppRoot extends ReactiveComponent {
  
  _route = "";
@@ -43,15 +48,35 @@ class AppRoot extends ReactiveComponent {
  RC: ReactiveComponent,
  RDC: ReactiveDummyComponent,
  };
+ 
+ @Parser _routes = {};
+ 
+ __navigationQueue = [];
+ 
+ __navigatorId = 0;
+ 
+ __routeCandidate = "";
  static get observedAttributes() {
  return [CONST.routeAttribute];
  }
  constructor(attrs) {
  super(attrs);
+ if (AppRoot.instance) return AppRoot.instance;
+ AppRoot.instance = this;
  this.herd = new Herd(this);
  this.api = api;
  this.navigate = navigate.bind(this);
  this.addPopStateListener();
+ Object.defineProperties(window.location, {
+ 
+ route: {
+ get: () => this._route,
+ },
+ 
+ candidate: {
+ get: () => this.__routeCandidate,
+ },
+ });
  }
  
  connectedCallback() {
@@ -102,36 +127,17 @@ class AppRoot extends ReactiveComponent {
  
  addPopStateListener() {
  window.addEventListener("popstate", () => {
- const currentPath = window.location.pathname;
- if (_routes[currentPath] && this._route !== currentPath) {
- this.route = currentPath;
- }
+ this.route = CONST.symbols.popStateMarker;
  });
  }
  
  attributeChangedCallback(name, oldValue, newValue) {
- if (name === CONST.routeAttribute && oldValue !== newValue) {
- if (oldValue === null) {
- this.loadRoute(newValue);
- } else {
- this.changeRoute(newValue);
- }
- }
+ if (name !== CONST.routeAttribute) return;
+ if (this.route && !newValue) return this.setAttribute(name, "/");
+ this.route = newValue;
  }
  
- async changeRoute(newRoute) {
- const isReload = newRoute === this._route;
- if (isReload) {
- await this.getLayoutPaths();
- }
- const { base, layout } = await this.preLoadRoute(newRoute, isReload);
- if (!base) return;
- await this.viewTransition({ base, layout }, true);
- }
- 
- async viewTransition({ base, layout }, isReloaded) {
- const transitionCallback = () => {
- if (isReloaded) {
+ resetBeforeTransition() {
  this.internal.mounted = true;
  const persistentChildren = this.appContent.querySelectorAll(
  "*[data-piglet-persistent]",
@@ -139,50 +145,97 @@ class AppRoot extends ReactiveComponent {
  this.appContent.replaceChildren(...persistentChildren);
  this.reset();
  }
- this.loadRouteSync(base, layout);
- return this.appRootConnected();
- };
- if (!document.startViewTransition || window.viewTransitionRunning) {
- await this.appContent.runPageTransition("out");
- transitionCallback();
- await this.appContent.runPageTransition();
- await this.appRootConnected();
- } else {
- const currentOverflow = this.style.overflow;
- this.style.overflow = "hidden";
- window.viewTransitionRunning = true;
- const transition = document.startViewTransition(
- transitionCallback.bind(this),
+ 
+ transitionCallback({ base, layout }, isInitial = false) {
+ if (!isInitial) this.resetBeforeTransition();
+ this.renderComponent(base, layout);
+ sendToExtension(CONST.extension.initialMessage, this.root);
+ console.pig(
+ CONST.pigletLogs.appRoot.routeLoaded(this.route),
+ CONST.coreLogsLevels.info,
  );
- await transition.finished;
- window.viewTransitionRunning = false;
- this.style.overflow = currentOverflow;
+ return this.appRootConnected();
  }
+ 
+ startRouteChain(navigator, data) {
+ async function* gen({ route, isInitial, isReloaded }) {
+ if (isReloaded || Object.keys(this._layoutPaths).length === 0) {
+ yield await this.getLayoutPaths();
+ }
+ const { base, layout, html } = await this.preLoadRoute(route, isReloaded);
+ if (!base) return false;
+ const tags = [
+ ...this.extractCustomTags(html),
+ ...this.extractCustomTags(layout),
+ ];
+ yield await this.loadCustomComponents(tags);
+ if (!document.startViewTransition) {
+ yield await this.appContent.runPageTransition("out");
+ yield await this.transitionCallback({ base, layout }, isInitial);
+ yield await this.appContent.runPageTransition();
+ yield await this.appRootConnected();
+ } else {
+ if (window.viewTransitionRunning) {
+ window.viewTransitionRunning.skipTransition();
+ console.pig(
+ CONST.pigletLogs.skippingViewTransition,
+ CONST.coreLogsLevels.warn,
+ );
+ }
+ if (isInitial) {
+ this.resetBeforeTransition();
+ }
+ const currentOverflow = this.style.overflow;
+ try {
+ this.style.overflow = "hidden";
+ const transition = document.startViewTransition(
+ this.transitionCallback.bind(this, { base, layout }),
+ );
+ window.viewTransitionRunning = transition;
+ yield await transition.ready;
+ yield await transition.updateCallbackDone;
+ yield await transition.finished;
+ window.viewTransitionRunning = null;
+ this.style.overflow = currentOverflow;
+ } catch (e) {
+ console.pig(
+ CONST.pigletLogs.errorDuringViewTransition,
+ CONST.coreLogsLevels.warn,
+ e,
+ );
+ window.viewTransitionRunning = null;
+ this.style.overflow = currentOverflow;
+ yield await this.appRootConnected();
+ return true;
+ }
+ }
+ return true;
+ }
+ gen.bind(this);
+ return new Promise(async (resolve) => {
+ const generator = gen.call(this, data);
+ let result = await generator.next();
+ while (!result.done) {
+ if (navigator.isStale) {
+ console.pig(
+ CONST.pigletLogs.staleNavigation,
+ CONST.coreLogsLevels.warn,
+ );
+ return resolve(false);
+ }
+ result = await generator.next(result.value);
+ }
+ navigator.success();
+ resolve(result.value);
+ });
  }
  
  async preLoadRoute(route, isReloaded = false) {
- this._route = route;
  try {
- let routePath = _routes[route];
- if (!routePath) {
- routePath = "NotFound";
- }
+ const routePath = this._routes[route] ?? "NotFound";
  const routeLayout = this._layoutPaths[routePath]?.layout;
- if (routeLayout === this.__previousLayout && !isReloaded) {
- const { base, html } = await fetchComponentData(
- routePath,
- [CONST.componentRoute.base, CONST.componentRoute.html],
- this.root,
- isReloaded,
- );
- if (html) {
- await this.loadCustomComponents(this.extractCustomTags(html));
- }
- return {
- base,
- layout: "",
- };
- }
+ const isLayoutTheSame =
+ routeLayout === this.__previousLayout && !isReloaded;
  this.__previousLayout = routeLayout;
  const { base, html, layout } = await fetchComponentData(
  routePath,
@@ -194,16 +247,10 @@ class AppRoot extends ReactiveComponent {
  this.root,
  isReloaded,
  );
- if (html) {
- const tags = [
- ...this.extractCustomTags(html),
- ...this.extractCustomTags(layout),
- ];
- await this.loadCustomComponents(tags);
- }
  return {
  base,
- layout,
+ layout: isLayoutTheSame ? "" : layout,
+ html,
  };
  } catch (err) {
  console.pig(
@@ -213,24 +260,6 @@ class AppRoot extends ReactiveComponent {
  );
  this.appContent.innerHTML = `<h1>${CONST.pageNotFound}</h1>`;
  }
- }
- 
- async loadRoute(route) {
- if (Object.keys(this._layoutPaths).length === 0) {
- await this.getLayoutPaths();
- }
- const { base, layout } = await this.preLoadRoute(route);
- if (!base) return;
- await this.viewTransition({ base, layout }, false);
- }
- 
- loadRouteSync(base, layout) {
- this.renderComponent(base, layout);
- sendToExtension(CONST.extension.initialMessage, this.root);
- console.pig(
- CONST.pigletLogs.appRoot.routeLoaded(this._route),
- CONST.coreLogsLevels.info,
- );
  }
  
  extractCustomTags(pageSource) {
@@ -314,18 +343,97 @@ class AppRoot extends ReactiveComponent {
  }
  }
  
+ createNavigator(route) {
+ const id = ++this.__navigatorId;
+ const entry = { route, id };
+ this.__navigationQueue.push(entry);
+ const condition = () => {
+ const isStale =
+ this.__navigationQueue[this.__navigationQueue.length - 1]?.id !== id;
+ if (isStale) {
+ const index = this.__navigationQueue.findIndex((e) => e.id === id);
+ if (index !== -1) this.__navigationQueue.splice(index, 1);
+ return false;
+ }
+ return true;
+ };
+ const status = {
+ id,
+ route,
+ done: false,
+ get isStale() {
+ return !condition();
+ },
+ };
+ status.success = () => {
+ const index = this.__navigationQueue.findIndex((e) => e.id === id);
+ if (index !== -1) this.__navigationQueue.splice(index, 1);
+ status.done = true;
+ };
+ return status;
+ }
+ 
  get route() {
  return this._route;
  }
  
- set route(newRoute) {
- if (this._route !== newRoute) {
- this.setAttribute(CONST.routeAttribute, newRoute);
- if (window.location.pathname !== newRoute) {
- history.pushState({}, "", newRoute);
+ reload() {
+ this.route = this._route;
  }
- this._route = newRoute;
+ 
+ __forceFullReload() {
+ window.location.reload();
  }
+ 
+ set route(passedRoute) {
+ return new Promise(async () => {
+ const native = passedRoute === CONST.symbols.popStateMarker;
+ const targetRoute = native ? window.location.pathname : passedRoute;
+ const routeData = {
+ previousRoute: this._route,
+ isInitial: this._route === "",
+ native,
+ redirected: false,
+ };
+ let testConnection;
+ try {
+ testConnection = await fetch(targetRoute);
+ } catch {}
+ const testURL = new URL(testConnection.url);
+ const route = testURL.pathname;
+ routeData.route = route;
+ routeData.isReloaded = this._route === route;
+ if (route !== targetRoute) {
+ routeData.redirected = true;
+ }
+ this.__routeCandidate = route;
+ const statusCode = String(testConnection.status)[0];
+ if (["4", "5"].includes(statusCode)) {
+ this.dispatchEvent(
+ new RouteEvent(routeData, CONST.pigletEvents.canceledByMiddleware),
+ );
+ console.pig(
+ CONST.pigletLogs.canceledByMiddleware(route),
+ CONST.coreLogsLevels.info,
+ );
+ return;
+ }
+ const navigator = this.createNavigator(route);
+ this.dispatchEvent(
+ new RouteEvent(routeData, CONST.pigletEvents.beforeRouteChange),
+ );
+ const wasStale = !(await this.startRouteChain(navigator, routeData));
+ if (wasStale) {
+ return;
+ }
+ this._route = route;
+ if (!native) {
+ window.history.pushState({}, "", route);
+ }
+ this.dispatchEvent(
+ new RouteEvent(routeData, CONST.pigletEvents.routeChanged),
+ );
+ });
  }
 }
 export default AppRoot;

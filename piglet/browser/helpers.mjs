@@ -64,9 +64,9 @@ const api = async function (path, fetchOptions = {}, expect = "raw") {
  }
  }
 };
-const navigate = function (route) {
- window.history.pushState({}, "", route);
- window.dispatchEvent(new PopStateEvent("popstate"));
+const navigate = function (route, options = {}) {
+ const { condition = true, fallback = "/" } = options;
+ this.root.route = condition ? route : fallback;
  return true;
 };
 const { setViaGetterMarker, nestedDeepProxyMarker } = CONST.symbols;
@@ -171,15 +171,6 @@ const fetchWithCache = async (url, root) => {
  })();
  root.__fetchQueue.set(url, fetchPromise);
  return fetchPromise;
-};
-const pageRevealCallback = (event, root) => {
- if (
- !event.viewTransition &&
- document.startViewTransition &&
- !window.viewTransitionRunning
- ) {
- return root.appContent.runPageTransition("in", 200);
- }
 };
 function parseHTMLToFragment(html) {
  const doc = new DOMParser().parseFromString(html, "text/html");
@@ -449,10 +440,12 @@ function createStateIfMissing(
  for (const renderIf of renderIfs) {
  let parsedCondition = renderIf.attrs.condition;
  if (typeof parsedCondition !== "string") continue;
- if (parsedCondition.startsWith("!"))
- parsedCondition = parsedCondition.substring(1);
- if (!parsedCondition.startsWith("$")) continue;
- parsedCondition = parsedCondition.substring(1);
+ const negated = parsedCondition.startsWith("!");
+ if (negated) parsedCondition = parsedCondition.substring(1);
+ const herd = parsedCondition.startsWith("H$");
+ const state = parsedCondition.startsWith("$");
+ if (!state && !herd) continue;
+ parsedCondition = parsedCondition.substring(state ? 1 : 2);
  const parts = parsedCondition.split(".");
  parsedCondition = parts.at(0);
  const isDependent = parsedCondition === key;
@@ -480,7 +473,6 @@ export {
  createStateProxy,
  createDeepOnChangeProxy,
  useMarkerGenerator,
- pageRevealCallback,
  setNativeAttributes,
  createStateIfMissing,
 };

@@ -77,11 +77,14 @@ class Herd {
  sendToExtension(CONST.extension.state, root);
  },
  };
- const [ref, prop] = this.observerWaiters.get(key) ?? [null, null];
- if (ref && prop) {
- this.observe(ref, prop);
- this.observerWaiters.delete(key);
+ const components = this.observerWaiters.get(key) ?? [];
+ for (const component of components) {
+ this.observe(component, key);
+ if (component.constructor.name === "RenderIf") {
+ component._updateFromAttribute();
  }
+ }
+ this.observerWaiters.delete(key);
  return state;
  }
  
@@ -95,8 +98,12 @@ class Herd {
  stateChange(value, key, prevValue, true);
  },
  };
- if (!this.globalState[key] && !this.observerWaiters.has(key)) {
- this.observerWaiters.set(key, [componentInstance, key]);
+ const observerWaiters = this.observerWaiters.get(key) ?? [];
+ if (
+ !this.globalState[key] &&
+ !observerWaiters.includes(componentInstance)
+ ) {
+ this.observerWaiters.set(key, [...observerWaiters, componentInstance]);
  return;
  }
  const state = this.globalState[key];

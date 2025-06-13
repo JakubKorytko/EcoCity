@@ -63,6 +63,7 @@ class RenderIf extends ReactiveDummyComponent {
  if (conditionProperty.startsWith("H$")) {
  state = this.root.herd.globalState;
  conditionProperty = conditionProperty.substring(2);
+ this.root.herd.observe(this, conditionProperty);
  isUsingHerd = true;
  } else if (!conditionProperty.startsWith("$")) {
  this._condition = true;
@@ -95,11 +96,13 @@ class RenderIf extends ReactiveDummyComponent {
  CONST.pigletLogs.conditionNotFoundInState(conditionProperty),
  CONST.coreLogsLevels.warn,
  );
- this._condition = false;
+ this._condition = this._negated;
  this.updateVisibility();
  return;
  }
- this._state = state[conditionProperty]._state;
+ const { _state } = state[conditionProperty];
+ this._state =
+ _state === CONST.symbols.setViaGetterMarker ? undefined : _state;
  if (isUsingHerd) {
  this.root.herd.observe(this, conditionProperty);
  } else {
@@ -121,9 +124,11 @@ class RenderIf extends ReactiveDummyComponent {
  updateVisibility() {
  if (this._condition && !this._contentMounted) {
  this.append(this._contentFragment);
+ this.style.removeProperty("display");
  this._contentMounted = true;
  } else if (!this._condition && this._contentMounted) {
  this._moveChildrenToFragment();
+ this.style.setProperty("display", "none");
  this._contentMounted = false;
  }
  }

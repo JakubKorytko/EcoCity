@@ -41,7 +41,7 @@ class Socket {
  const message = JSON.parse(event.data);
  if (message.type === CONST.socket.messageTypes.reload && message.data) {
  if (message.data === "layout") {
- this.root.changeRoute(this.root._route);
+ this.root.reload();
  return;
  }
  
@@ -55,14 +55,14 @@ class Socket {
  } else if (message.type === CONST.socket.messageTypes.reload) {
  
  const appRoot = document.querySelector(CONST.appRootTag);
- appRoot.changeRoute(appRoot._route);
+ appRoot.reload();
  }
  if (message.type === CONST.socket.messageTypes.serverRestart) {
  console.pig(CONST.pigletLogs.socket.serverRestarted);
  this.tryReconnect();
  }
  if (message.type === CONST.socket.messageTypes.fullReload) {
- window.location.reload();
+ this.root.__forceFullReload();
  }
  };
  this.ws.onclose = () => {

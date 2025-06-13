@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 import console from "@Piglet/utils/console";
-export const routes = {};
-export const routeAliases = {};
+import Parser from "@Piglet/parser/values";
+const { routes, routeAliases } = Parser;
 function findComponentFiles(dir, componentFiles = []) {
  const files = fs.readdirSync(dir, { withFileTypes: true });
  for (const file of files) {
@@ -38,3 +38,4 @@ export function parseRoutes(html, pagesDir) {
  }
  }
 }
+export { routes, routeAliases };
