@@ -16,8 +16,46 @@
     $B.firstRender = false;
 
     window.ecoCityToastManager = {
-      openedToastsHeight: 0,
-      show: ({ title, type, message, time = 3000 }) => {
+      calculateTotalHeightOfPreviousToasts(index) {
+        return this.openedToasts
+          .slice(0, index)
+          .reduce(
+            (total, toast) => total + (toast ? toast.offsetHeight + 10 : 0),
+            0,
+          );
+      },
+      openedToasts: new Array(100).fill(null),
+      toastsWaiting: [],
+      blockToastQueue() {
+        this.isAnyToastLoading = true;
+      },
+      unblockToastQueue() {
+        this.isAnyToastLoading = false;
+        if (this.toastsWaiting.length > 0) {
+          const toast = this.toastsWaiting.shift();
+          this.show(toast);
+        }
+      },
+      addToast(toast) {
+        const index = this.openedToasts.findIndex((t) => t === null);
+        if (index === -1) {
+          console.warn("No space for new toast, consider increasing limit.");
+          return;
+        }
+        this.openedToasts[index] = toast;
+        const totalHeight = this.calculateTotalHeightOfPreviousToasts(index);
+        return {
+          toast,
+          index,
+          totalHeight,
+        };
+      },
+      async show({ title, type, message, time = 3000 }) {
+        if (this.isAnyToastLoading) {
+          this.toastsWaiting.push({ title, type, message, time });
+          return;
+        }
+
         const toast = $`<ToastComponent ${{ title, type, message }} />`;
 
         document.body.append(toast);

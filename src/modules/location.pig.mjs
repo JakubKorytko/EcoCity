@@ -1,4 +1,4 @@
-async function getDistanceToLocation(fakeLat, fakeLon) {
+async function getDistanceToLocation(lat, lon) {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       return reject(new Error("Geolocation is not supported by this browser."));
@@ -9,24 +9,17 @@ async function getDistanceToLocation(fakeLat, fakeLon) {
         const userLat = position.coords.latitude;
         const userLon = position.coords.longitude;
 
-        const distance = getDistanceFromLatLonInKm(
-          userLat,
-          userLon,
-          fakeLat,
-          fakeLon,
-        );
+        const distance = getDistanceFromLatLonInKm(userLat, userLon, lat, lon);
 
         try {
           resolve({
             distanceKm: distance,
-            fakeCoords: { latitude: fakeLat, longitude: fakeLon },
+            coords: { latitude: lat, longitude: lon },
             userCoords: { latitude: userLat, longitude: userLon },
           });
         } catch (error) {
           reject(
-            new Error(
-              "Failed to reverse geocode fake location: " + error.message,
-            ),
+            new Error("Failed to reverse geocode location: " + error.message),
           );
         }
       },

@@ -20,9 +20,7 @@
           <input type="checkbox" id="remember-me" name="remember-me" />
           <label for="remember-me">Remember me</label>
         </div>
-        <NavLink to="/forgot-password" class="link forgot">
-          Forgot password?
-        </NavLink>
+        <NavLink class="link forgot"> Forgot password? </NavLink>
       </section>
 
       <div>
@@ -114,6 +112,64 @@
   import { transition } from "/modules/helpers.pig";
 
   $B.isPasswordVisible = false;
+
+  $element(".forgot").on("click", () => {
+    window.ecoCityToastManager.show({
+      type: "info",
+      title: "Forgot Password",
+      message: "Please contact support to reset your password.",
+    });
+  });
+
+  $element("#signIn").on("click", (event) => {
+    event.preventDefault();
+    const email = $element("#email").value;
+    const password = $element("#password").value;
+
+    if (!email || !password) {
+      window.ecoCityToastManager.show({
+        type: "error",
+        title: "Error",
+        message: "Please fill in all fields.",
+      });
+      return;
+    }
+
+    $api("/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          window.ecoCityToastManager.show({
+            type: "error",
+            title: "Login Failed",
+            message: response.message || "Invalid credentials.",
+          });
+          throw "Login failed";
+        }
+      })
+      .then((response) => {
+        window.ecoCityToastManager.show({
+          type: "success",
+          title: "Login Successful",
+          message: `Welcome back, ${response.email}!`,
+        });
+
+        $H.user = response;
+        $navigate("/");
+      })
+      .catch((error) => {
+        if (error === "Login failed") return;
+        window.ecoCityToastManager.show({
+          type: "error",
+          title: "Error",
+          message: error.message || "An error occurred during login.",
+        });
+      });
+  });
 
   $element("#eye").on("click", () => {
     $B.isPasswordVisible = !$B.isPasswordVisible;

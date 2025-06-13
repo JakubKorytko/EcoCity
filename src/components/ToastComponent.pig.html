@@ -90,6 +90,14 @@
 <script>
   import { getTimeDifference } from "/modules/helpers.pig";
 
+  $B.firstRender = $$(true);
+
+  if (!$B.firstRender) {
+    throw out;
+  }
+
+  $B.firstRender = false;
+
   const { type, title, message } = $attrs;
 
   const types = {
@@ -104,18 +112,21 @@
   $element("div>span").innerText = title || "Notification";
   $element("p").innerText = message || "No message provided.";
 
+  window.ecoCityToastManager.blockToastQueue();
+
   $element("img").on("load", () => {
-    const distance = window.ecoCityToastManager.openedToastsHeight;
+    const { totalHeight } = window.ecoCityToastManager.addToast($this);
 
     $this.style.transition = "all 0.5s";
-    $this.style.transform = `translateY(${-distance}px)`;
+    $this.style.transform = `translateY(${-totalHeight}px)`;
 
-    window.ecoCityToastManager.openedToastsHeight += $this.offsetHeight + 10;
+    window.ecoCityToastManager.unblockToastQueue();
   });
 
   $this.removeToast = () => {
     clearInterval($B.interval);
-    window.ecoCityToastManager.openedToastsHeight -= $this.offsetHeight + 10;
+    const index = window.ecoCityToastManager.openedToasts.indexOf($this);
+    window.ecoCityToastManager.openedToasts[index] = null;
     hideAndRemove();
   };
 
