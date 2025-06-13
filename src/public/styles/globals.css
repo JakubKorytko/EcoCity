@@ -31,6 +31,14 @@
   --Dumpster_bg: #fee2e2;
 }
 
+input[type="checkbox"] {
+  cursor: pointer;
+
+  &:checked {
+    accent-color: var(--Primary_color);
+  }
+}
+
 * {
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
@@ -77,30 +85,48 @@ h4 {
   border-radius: 8px;
   font-size: 16px;
   line-height: 24px;
+  transition: background-color 0.3s;
+  cursor: pointer;
 }
 
 .empty-green-button {
-  border: 1px solid var(--Primary_color);
+  border: 1px groove var(--Primary_color);
   color: var(--Primary_color);
   background: rgba(255, 255, 255, 0);
+
+  &:hover {
+    background: rgb(5 150 105 / 8%);
+  }
 }
 
 .empty-white-button {
   border: 1px solid white;
   color: white;
   background: rgba(255, 255, 255, 0);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.16);
+  }
 }
 
 .green-button {
   border: none;
   color: #fff;
   background: var(--Primary_color);
+
+  &:hover {
+    background: #08c288;
+  }
 }
 
 .white-button-primary {
   border: none;
   background: #fff;
   color: var(--Primary_color);
+
+  &:hover {
+    background: #ddffdc;
+  }
 }
 
 .white-button {
@@ -108,18 +134,30 @@ h4 {
   border: 1px solid #e5e7eb;
   background: #fff;
   color: #000;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.12);
+  }
 }
 
 .gray-button {
   border: none;
   background: #e5e7eb;
   color: #000;
+
+  &:hover {
+    background: #d1d5db;
+  }
 }
 
 .transparent-button {
   border-radius: 4px;
   border: 1px solid #e5e7eb;
   background: rgba(255, 255, 255, 0);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.16);
+  }
 }
 
 input,
