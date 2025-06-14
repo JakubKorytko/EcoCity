@@ -1,5 +1,7 @@
-import { generateToken } from "@/server/api/auth";
+import db from "@/server/database/db";
 import { json } from "@/server/api/helpers";
+import { generateToken } from "@/server/api/auth";
+import { verifyPassword } from "@/server/database/password";
 
 export default async function (req, res) {
   if (req.method !== "POST") {
@@ -17,14 +19,30 @@ export default async function (req, res) {
     );
   }
 
-  const session = generateToken(email, password);
+  try {
+    const users = await db.selectWhere("users", { email });
 
-  if (!session) {
-    res.statusCode = 401;
-    return res.end(JSON.stringify({ error: "Invalid email or password." }));
+    if (users.length === 0) {
+      res.statusCode = 401;
+      return res.end(JSON.stringify({ error: "Invalid email or password." }));
+    }
+
+    const user = users[0];
+    const isPasswordValid = verifyPassword(password, user.password);
+
+    if (!isPasswordValid) {
+      res.statusCode = 401;
+      return res.end(JSON.stringify({ error: "Invalid email or password." }));
+    }
+
+    const session = await generateToken(user);
+
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    return res.end(JSON.stringify(session));
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.statusCode = 500;
+    return res.end(JSON.stringify({ error: "Internal Server Error" }));
   }
-
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json");
-  return res.end(JSON.stringify(session));
 }

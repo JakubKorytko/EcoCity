@@ -35,10 +35,10 @@ async function getCityNameFromCoords(lat, lon) {
   const address = data.address;
 
   return (
-    address.city ||
-    address.town ||
-    address.village ||
-    address.hamlet ||
+    address?.city ||
+    address?.town ||
+    address?.village ||
+    address?.hamlet ||
     "Unknown"
   );
 }
