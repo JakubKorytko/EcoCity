@@ -1,0 +1,66 @@
+<content>
+  <table>
+    <thead>
+      <tr>
+        <th>Report Title</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Comments</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</content>
+
+<script>
+  $H.observe("reports");
+  $H.observe("comments");
+
+  const elements = [];
+
+  $H.reports.forEach(function (report) {
+    const comments = $H.comments.filter(
+      (comment) => comment.reportId === report.id,
+    );
+
+    const date = new Date(report.updatedAt || report.createdAt);
+
+    const reportEl = $`<DashboardReport ${{
+      data: {
+        ...report,
+        commentsCount: comments.length,
+        date: date.toLocaleDateString(),
+      },
+    }} />`;
+    elements.push(reportEl);
+  });
+
+  $element("tbody").append(...elements);
+</script>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    &:last-of-type {
+      text-align: right;
+    }
+  }
+
+  button {
+    margin-right: 5px;
+  }
+</style>

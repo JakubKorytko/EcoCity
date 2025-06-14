@@ -1,11 +1,42 @@
-@import "/public/font-awesome/css/font-awesome.min.css";
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+/* latin-ext */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/public/fonts/inter-latin-ext.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/public/fonts/inter-latin.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
 
 :root {
   --Primary_color: #059669;
   --Secondary_color: #d1fae5;
   --Water_bg: #c7f4fe;
   --Water_fg: #006aff;
+  --Dumpster_bg: #fee2e2;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+
+  &:checked {
+    accent-color: var(--Primary_color);
+  }
 }
 
 * {
@@ -14,6 +45,35 @@
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 36px;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+h4 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px; /* 155.556% */
 }
 
 .button {
@@ -25,30 +85,112 @@
   border-radius: 8px;
   font-size: 16px;
   line-height: 24px;
+  transition: background-color 0.3s;
+  cursor: pointer;
 }
 
 .empty-green-button {
-  border: 1px solid var(--Primary_color);
+  border: 1px groove var(--Primary_color);
   color: var(--Primary_color);
   background: rgba(255, 255, 255, 0);
+
+  &:hover {
+    background: rgb(5 150 105 / 8%);
+  }
 }
 
 .empty-white-button {
   border: 1px solid white;
   color: white;
   background: rgba(255, 255, 255, 0);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.16);
+  }
 }
 
 .green-button {
   border: none;
   color: #fff;
   background: var(--Primary_color);
+
+  &:hover {
+    background: #08c288;
+  }
 }
 
-.white-button {
+.white-button-primary {
   border: none;
   background: #fff;
   color: var(--Primary_color);
+
+  &:hover {
+    background: #ddffdc;
+  }
+}
+
+.white-button {
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #000;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.12);
+  }
+}
+
+.gray-button {
+  border: none;
+  background: #e5e7eb;
+  color: #000;
+
+  &:hover {
+    background: #d1d5db;
+  }
+}
+
+.transparent-button {
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.16);
+  }
+}
+
+input,
+textarea {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  display: flex;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+}
+
+input {
+  display: flex;
+  padding: 7px 14px;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+textarea {
+  width: 100%;
+  padding: 9px 17px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #757575;
 }
 
 .badge {
@@ -67,11 +209,21 @@
 }
 
 .badge-new {
-  background: var(--Water_bg, #c7f4fe);
-  color: var(--Water_fg, #006aff);
+  background: var(--Water_bg);
+  color: var(--Water_fg);
 }
 
 .badge-pending {
   background: #fef3c7;
   color: #92400e;
+}
+
+.badge-rejected {
+  background: var(--Dumpster_bg);
+  color: #991b1b;
+}
+
+.badge-resolved {
+  background: var(--Secondary_color);
+  color: #065f46;
 }

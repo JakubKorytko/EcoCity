@@ -1,1 +1,194 @@
-<content> Sign In </content>
+<content>
+  <main>
+    <header>
+      <img src="/public/images/green_icons/shield.svg" />
+      <h2>Sign in to your account</h2>
+    </header>
+    <form>
+      <section>
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="password">Password</label>
+        <div>
+          <input type="password" id="password" name="password" required />
+          <img src="/public/images/other_icons/eye.svg" id="eye" class="eye" />
+        </div>
+      </section>
+      <section>
+        <div>
+          <input type="checkbox" id="remember-me" name="remember-me" />
+          <label for="remember-me">Remember me</label>
+        </div>
+        <NavLink class="link forgot"> Forgot password? </NavLink>
+      </section>
+
+      <div>
+        <img src="/public/images/green_icons/lock.svg" />
+        <button type="submit" class="button green-button" id="signIn">
+          Sign In
+        </button>
+      </div>
+
+      <p>
+        <span>Don't have an account?</span>
+        <NavLink to="/signup" class="link">Sign up now</NavLink>
+      </p>
+      <NavLink to="/" class="link backToHome">Back to Home</NavLink>
+    </form>
+  </main>
+</content>
+
+<style>
+  @import "/public/styles/signinout.pig.css";
+
+  main {
+    width: 450px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  form {
+    section {
+      &:first-of-type {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      &:nth-of-type(2) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        > div {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+      }
+    }
+  }
+
+  div:has(#password),
+  div:has(#signIn) {
+    position: relative;
+    align-self: stretch;
+    display: flex;
+  }
+
+  div:has(#signIn) {
+    margin-top: 12px;
+  }
+
+  #signIn {
+    width: 100%;
+  }
+
+  #password {
+    padding-right: 40px;
+  }
+
+  div:has(#signIn) img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  div:has(#signIn) img {
+    left: 15px;
+  }
+</style>
+
+<script>
+  import { transition } from "/modules/helpers.pig";
+  import CookieManager from "/modules/CookieManager.pig";
+
+  $B.isPasswordVisible = false;
+
+  $element(".forgot").on("click", () => {
+    window.ecoCityToastManager.show({
+      type: "info",
+      title: "Forgot Password",
+      message: "Please contact support to reset your password.",
+    });
+  });
+
+  $element("#signIn").on("click", (event) => {
+    event.preventDefault();
+    const email = $element("#email").value;
+    const password = $element("#password").value;
+
+    if (!email || !password) {
+      window.ecoCityToastManager.show({
+        type: "error",
+        title: "Error",
+        message: "Please fill in all fields.",
+      });
+      return;
+    }
+
+    $api("/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          window.ecoCityToastManager.show({
+            type: "error",
+            title: "Login Failed",
+            message: response.message || "Invalid credentials.",
+          });
+          throw "Login failed";
+        }
+      })
+      .then((response) => {
+        const user = response.user ?? {
+          email: "",
+          name: "Unknown User",
+          role: "guest",
+          token: "",
+        };
+        const firstName = user.name.split(" ")[0] || user.name;
+
+        window.ecoCityToastManager.show({
+          type: "success",
+          title: "Login Successful",
+          message: `Welcome back, ${firstName}!`,
+        });
+        CookieManager.set("session", response.token);
+        $H.user = user;
+        $H.isAuthenticated = true;
+        $navigate("/");
+      })
+      .catch((error) => {
+        if (error === "Login failed") return;
+        window.ecoCityToastManager.show({
+          type: "error",
+          title: "Error",
+          message: error.message || "An error occurred during login.",
+        });
+      });
+  });
+
+  $element("#eye").on("click", () => {
+    $B.isPasswordVisible = !$B.isPasswordVisible;
+    const passwordInput = $element("#password");
+    passwordInput.type = $B.isPasswordVisible ? "text" : "password";
+    transition(() => {
+      $element("#eye").src = $B.isPasswordVisible
+        ? "/public/images/other_icons/eye-slash.svg"
+        : "/public/images/other_icons/eye.svg";
+    });
+  });
+</script>

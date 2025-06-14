@@ -16,7 +16,6 @@ const useState = (
  asRef,
  avoidClone,
  root,
- false,
  );
  
  return {
@@ -33,7 +32,6 @@ const useState = (
  asRef,
  avoidClone,
  root,
- true,
  );
  root.globalState[componentName][key].setState(newValue);
  sendToExtension(CONST.extension.state, root);

@@ -9,6 +9,9 @@ import coreControllers from "@Piglet/controllers/index";
 const createServer = () => {
  runReloadClientOnWSMessageListener();
  const server = new Proxy(http.createServer(serverHandler), proxyHandler);
+ server.middleware = (callback) => {
+ server.customRoutes.middleware = callback;
+ };
  server.on("upgrade", socketHandler);
  server.customRoutes = {
  ...coreControllers,

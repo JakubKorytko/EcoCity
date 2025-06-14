@@ -13,8 +13,9 @@ import { formatHTML, formatJS } from "@Piglet/parser/format";
 import CONST from "@Piglet/misc/CONST";
 import console from "@Piglet/utils/console";
 import { generateLayoutFile } from "@Piglet/parser/layout";
+import Parser from "@Piglet/parser/values";
 function extractAndRemoveCssImports(css) {
- const importRegex = /^@import\s+[^;]+;/gm;
+ const importRegex = /^\s*@import\s+[^;]+;/gm;
  const imports = [];
  let cleaned;
  let match;
@@ -28,7 +29,7 @@ function extractAndRemoveCssImports(css) {
  };
 }
 function extractAndRemoveImports(code) {
- const importRegex = /^import\s+[\s\S]*?["'][^"']+["'];?/gm;
+ const importRegex = /^\s*import\s+[\s\S]*?["'][^"']+["'];?/gm;
  const imports = [];
  let cleaned;
  let match;
@@ -84,8 +85,9 @@ const generateComponentScript = async (scriptJS, externalJS, componentName) => {
  const outputPath = resolvePath(`@/builtScript/${componentName}.mjs`);
  const scriptForFile = formatJS(`
  ${imports.join("\n")}
- ${CONST.parserStrings.exportBeforeScript(isAsync)}
- ${cleanedCode}\n}`);
+ export default ${isAsync ? "async" : ""} function({${Parser.exportValues}}) {
+ ${cleanedCode}\n
+ }`);
  return fsp.writeFile(outputPath, scriptForFile);
 };
 const injectInnerHTMLToComponent = (

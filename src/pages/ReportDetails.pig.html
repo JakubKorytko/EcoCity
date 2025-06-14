@@ -1,1 +1,74 @@
-<content> Reports Details </content>
+<content>
+  <section>
+    <main>
+      <ReportDetailsHeader />
+      <section>
+        <ReportDetailsContent />
+        <ReportDetailsAside />
+      </section>
+    </main>
+  </section>
+  <PageFooter />
+</content>
+
+<script>
+  import { getUrlParams } from "/modules/helpers.pig";
+
+  const params = getUrlParams();
+  const reportId = Number(params.id);
+
+  $H.observe("reports");
+  $H.observe("users");
+  $H.observe("comments");
+
+  const report = $H.reports.find((r) => r.id === reportId);
+
+  if (!report) {
+    $element("main").innerHTML = "<h2>Report not found</h2>";
+    throw out;
+  }
+
+  const reportData = {
+    report,
+    user: $H.users.find((u) => u.id === report.authorId),
+    comments: $H.comments.filter((c) => c.reportId === reportId),
+    users: $H.users,
+  };
+
+  $element("ReportDetailsHeader").pass({ data: reportData });
+  $element("ReportDetailsContent").pass({ data: reportData });
+  $element("ReportDetailsAside").pass({ data: reportData });
+</script>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    > section {
+      padding: 50px 0;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      display: flex;
+
+      > main {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        > section {
+          display: flex;
+          flex-direction: row;
+          gap: 40px;
+        }
+      }
+    }
+  }
+</style>

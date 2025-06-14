@@ -1,0 +1,111 @@
+<content> </content>
+
+<script>
+  import CookieManager from "/modules/CookieManager.pig";
+
+  $B.firstRender = true;
+
+  if ($B.firstRender) {
+    $api("/reports", { method: "GET" }, "json").then(
+      (value) => ($H.reports = $$(value)),
+    );
+    $api("/users", { method: "GET" }, "json").then(
+      (value) => ($H.users = $$(value)),
+    );
+    $api("/comments", { method: "GET" }, "json").then(
+      (value) => ($H.comments = $$(value)),
+    );
+    $api(
+      "/session",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          token: CookieManager.get("session"),
+        }),
+      },
+      "json",
+    )
+      .then((value) => {
+        if (value && value.token) {
+          $H.user = value.user;
+          $H.isAuthenticated = true;
+        } else {
+          $H.user = { email: "", name: "", role: "guest", token: "" };
+          $H.isAuthenticated = false;
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching session:", error);
+        $H.user = { email: "", name: "", role: "guest", token: "" };
+        $H.isAuthenticated = false;
+      });
+
+    $B.firstRender = false;
+
+    window.ecoCityToastManager = {
+      calculateTotalHeightOfPreviousToasts(index) {
+        return this.openedToasts
+          .slice(0, index)
+          .reduce(
+            (total, toast) => total + (toast ? toast.offsetHeight + 10 : 0),
+            0,
+          );
+      },
+      openedToasts: new Array(100).fill(null),
+      toastsWaiting: [],
+      blockToastQueue() {
+        this.isAnyToastLoading = true;
+      },
+      unblockToastQueue() {
+        this.isAnyToastLoading = false;
+        if (this.toastsWaiting.length > 0) {
+          const toast = this.toastsWaiting.shift();
+          this.show(toast);
+        }
+      },
+      addToast(toast) {
+        const index = this.openedToasts.findIndex((t) => t === null);
+        if (index === -1) {
+          console.warn("No space for new toast, consider increasing limit.");
+          return;
+        }
+        this.openedToasts[index] = toast;
+        const totalHeight = this.calculateTotalHeightOfPreviousToasts(index);
+        return {
+          toast,
+          index,
+          totalHeight,
+        };
+      },
+      async show({ title, type, message, time = 3000 }) {
+        if (this.isAnyToastLoading) {
+          this.toastsWaiting.push({ title, type, message, time });
+          return;
+        }
+
+        const toast = $`<ToastComponent ${{ title, type, message }} />`;
+
+        document.querySelector("app-root").shadowRoot.append(toast);
+
+        setTimeout(() => {
+          if (typeof toast.removeToast === "function") {
+            toast.removeToast();
+          } else {
+            toast?.remove();
+            const index = this.openedToasts.indexOf(toast);
+            if (index === -1) {
+              return;
+            }
+            this.openedToasts[index] = null;
+          }
+        }, time);
+      },
+    };
+  }
+</script>
+
+<style>
+  :host {
+    display: none;
+  }
+</style>

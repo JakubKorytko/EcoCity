@@ -1,0 +1,148 @@
+<content>
+  <div>
+    <div>
+      <img src="/public/images/dots/blue.svg" />
+      <span>Notification</span>
+    </div>
+    <div>
+      <span></span>
+      <img src="/public/images/other_icons/xmark.svg" />
+    </div>
+  </div>
+  <p>No message provided.</p>
+</content>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    border-radius: 5px;
+    border: 1px solid #374151;
+    display: flex;
+    width: 350px;
+    flex-direction: column;
+    align-items: center;
+    gap: 13px;
+    background: #374151;
+    transform: translateY(calc(100% + 10px));
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+
+    > div {
+      border-radius: 4px 4px 0 0;
+      border-bottom: 1px solid #374151;
+      height: 39px;
+      width: 100%;
+      align-self: stretch;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      background: #fff;
+
+      div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+
+        &:nth-child(2) {
+          img {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+
+      color: #000;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 20px;
+
+      img {
+        width: 10px;
+        height: 10px;
+      }
+    }
+
+    > p {
+      width: 350px;
+      padding: 0 10px 10px 10px;
+
+      border-radius: 5px;
+      border: 1px solid #374151;
+      margin: 0;
+      background: #374151;
+
+      color: #f5f6f7;
+
+      font-size: 13px;
+
+      font-weight: 400;
+      line-height: 20px;
+    }
+  }
+</style>
+
+<script>
+  import { getTimeDifference } from "/modules/helpers.pig";
+
+  $B.firstRender = $$(true);
+
+  const { type, title, message } = $attrs;
+
+  const types = {
+    error: "red",
+    success: "green",
+    info: "blue",
+    warning: "yellow",
+  };
+
+  $element("div>img").src =
+    `/public/images/dots/${types[type in types ? type : "info"]}.svg`;
+  $element("div>span").innerText = title || "Notification";
+  $element("p").innerText = message || "No message provided.";
+
+  if (!$B.firstRender) {
+    throw out;
+  }
+
+  $B.firstRender = false;
+
+  window.ecoCityToastManager.blockToastQueue();
+
+  $element("img").on("load", () => {
+    const { totalHeight } = window.ecoCityToastManager.addToast($this);
+
+    $this.style.transition = "all 0.5s";
+    $this.style.transform = `translateY(${-totalHeight}px)`;
+
+    window.ecoCityToastManager.unblockToastQueue();
+  });
+
+  $this.removeToast = () => {
+    clearInterval($B.interval);
+    const index = window.ecoCityToastManager.openedToasts.indexOf($this);
+    window.ecoCityToastManager.openedToasts[index] = null;
+    hideAndRemove();
+  };
+
+  const hideAndRemove = () => {
+    $this.style.opacity = "0";
+    setTimeout(() => {
+      $this.remove();
+    }, 300);
+  };
+
+  $element("div:nth-of-type(2)>img").on("click", hideAndRemove);
+
+  $B.opened = $$(Date.now());
+  $B.interval = setInterval(() => {
+    $element("div:nth-of-type(2)>span").innerText = getTimeDifference(
+      $B.opened,
+    );
+  }, 1000);
+</script>

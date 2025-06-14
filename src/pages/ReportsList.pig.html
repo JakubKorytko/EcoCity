@@ -1,1 +1,77 @@
-<content> Reports List </content>
+<content>
+  <main>
+    <section>
+      <h3>Environmental Reports</h3>
+      <div>
+        <input type="search" placeholder="Search reports..." />
+        <button class="button white-button">In this week</button>
+        <button class="button white-button">Any Status</button>
+      </div>
+      <section>
+        <ReportsListComponent />
+      </section>
+      <section>
+        <PaginationFooter />
+      </section>
+    </section>
+  </main>
+  <PageFooter />
+</content>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    main {
+      width: 100%;
+      padding: 50px 0;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+
+      > section {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        width: 70%;
+
+        > div {
+          display: flex;
+          flex-direction: row;
+          gap: 10px;
+          align-items: center;
+        }
+
+        section:first-of-type {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+
+        section:nth-of-type(2) {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  $H.observe("reports");
+
+  $element("PaginationFooter").pass({
+    page: 1,
+    totalPages: Math.ceil($H.reports.length / 10),
+    totalReports: $H.reports.length,
+    reportsPerPage: 10,
+  });
+</script>

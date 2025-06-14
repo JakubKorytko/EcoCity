@@ -16,9 +16,9 @@
 
 /**
  * @typedef {{
- *   newValue: string|null, // New value of the attribute
- *   attrName: string, // Name of the attribute
- *   oldValue: string|null // Previous value of the attribute
+ *   value: string|null, // New value of the attribute
+ *   property: string, // Name of the attribute
+ *   prevValue: string|null // Previous value of the attribute
  * }} AttributeChange
  * Attribute change object.
  */
@@ -26,7 +26,7 @@
 /**
  * @typedef {{
  *   name: string, // Name of the reason
- *   data?: Record<string, object|string|number|boolean|null>, // Data of the reason
+ *   data?: AttributeChange[], // Data of the reason
  *   originalReason?: Reason // Original reason
  * }} Reason
  * Reason of mounting/re-rendering a component.
@@ -54,6 +54,10 @@
  *   errorLoadingScript: string, // Error loading script log
  *   errorInComponentScript: string, // Error in component script log
  *   cloneWarning: string, // Clone warning log
+ *   errorDuringViewTransition: string // Error during view transition log
+ *   skippingViewTransition: string, // Skipping view transition log
+ *   staleNavigation: string // Stale navigation log
+ *   canceledByMiddleware: (routeName: string) => string // Canceled by middleware log
  * }} PigletLogs
  * PigletJS logs object.
  */
@@ -105,8 +109,8 @@
  *   reason: {
  *     attributesChange: (changes: AttributeChange[]) => Reason, // Attributes change reason
  *     parentUpdate: Reason, // Parent update reason
- *     herdUpdate: (changes: Array<unknown>) => Reason, // Herd update reason
- *     stateChange: (changes: Array<unknown>) => Reason, // State change reason
+ *     herdUpdate: (changes: AttributeChange[]) => Reason, // Herd update reason
+ *     stateChange: (changes: AttributeChange[]) => Reason, // State change reason
  *     fragmentInjected: Reason, // Fragment injected reason
  *     WSReload: Reason
  *   },
@@ -117,6 +121,7 @@
  *   appRootTag: string, // App root tag
  *   stopComponentScriptExecution: string, // Stop component script execution message
  *   symbols: Record<string, unique symbol>, // Symbols used in PigletJS
+ *   pigletEvents: Record<string, `piglet:${string}`>, // PigletJS events
  * }} Constants
  * PigletJS constants object, used to store widely used values.
  */

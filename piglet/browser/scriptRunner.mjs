@@ -104,12 +104,18 @@ const queryElement = function (hostElement, selectorOrNode) {
  const passInfo = {
  ref: el,
  updates: {},
+ changes: [],
  delayed: updates.delayed,
  };
  for (const [key, value] of Object.entries(updates)) {
  const previousValue = el.attrs[key];
  if (previousValue !== value) {
  passInfo.updates[key] = value;
+ passInfo.changes.push({
+ property: key,
+ value,
+ prevValue: previousValue,
+ });
  }
  }
  if (Object.keys(passInfo.updates).length === 0) {
@@ -234,7 +240,7 @@ const scriptRunner = function (hostElement, module, scriptReason) {
  this.onAfterUpdate();
  }
  while (this.forwardedQueue.length) {
- const { ref, delayed, updates } = this.forwardedQueue.shift();
+ const { ref, delayed, updates, changes } = this.forwardedQueue.shift();
  ref.attrs = { ...ref.attrs, ...updates };
  if (
  ref?.internal?.mounted &&
@@ -242,10 +248,10 @@ const scriptRunner = function (hostElement, module, scriptReason) {
  ) {
  if (delayed) {
  setTimeout(() => {
- ref.__mountCallback(CONST.reason.attributesChange(updates));
+ ref.__mountCallback(CONST.reason.attributesChange(changes));
  }, 0);
  } else {
- ref.__mountCallback(CONST.reason.attributesChange(updates));
+ ref.__mountCallback(CONST.reason.attributesChange(changes));
  }
  }
  }

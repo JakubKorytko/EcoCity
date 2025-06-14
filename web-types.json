@@ -191,6 +191,76 @@
           ]
         },
         {
+          "name": "DashboardCard",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "DashboardCards",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "DashboardReport",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "DashboardReports",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "DataSource",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
           "name": "HomePageCard",
           "description": "No description found",
           "attributes": [
@@ -219,6 +289,48 @@
           ]
         },
         {
+          "name": "PageFooter",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "PageRouter",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "PaginationFooter",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
           "name": "RecentReport",
           "description": "No description found",
           "attributes": [
@@ -234,6 +346,132 @@
         },
         {
           "name": "RecentReports",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "ReportComment",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "ReportDetailsAside",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "ReportDetailsContent",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "ReportDetailsHeader",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "ReportsListComponent",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "SingleReport",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "SubmitCard",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "ToastComponent",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "name": "UploadFile",
           "description": "No description found",
           "attributes": [
             {

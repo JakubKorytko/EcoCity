@@ -1,0 +1,62 @@
+<content>
+  <main>
+    <img src="/public/images/reports/placeholder.png" alt="Report Icon" />
+    <p>Submit Card</p>
+  </main>
+</content>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    width: 230px;
+    padding: 21px 0;
+
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      gap: 8px;
+
+      p {
+        margin: 0;
+        color: #000;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px; /* 142.857% */
+      }
+    }
+  }
+</style>
+
+<script>
+  const { type } = $attrs;
+
+  const types = {
+    waste: {
+      label: "Illegal Dumping",
+      icon: "/public/images/green_icons/trash.svg",
+    },
+    water: {
+      label: "Water Pollution",
+      icon: "/public/images/other_icons/water.svg",
+    },
+    air: {
+      label: "Air Pollution",
+      icon: "/public/images/other_icons/clouds.svg",
+    },
+  };
+
+  $element("main > p").textContent = types[type].label;
+  $element("main > img").src = types[type].icon;
+</script>

@@ -1,0 +1,56 @@
+<content>
+  <p>Showing <span>??</span> of <span>???</span> reports</p>
+  <div class="pagination-controls">
+    <button class="prev button transparent-button" disabled>Previous</button>
+    <section></section>
+    <button class="next button transparent-button">Next</button>
+  </div>
+</content>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-direction: row;
+  }
+
+  .transparent-button {
+    color: #6b7280;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+</style>
+
+<script>
+  const { page, totalPages, totalReports, reportsPerPage } = $attrs;
+
+  $element("p > span:first-of-type").textContent = String(
+    Math.min(reportsPerPage, totalReports),
+  );
+
+  let pages = totalPages;
+
+  while (pages > 0) {
+    const section = $element(".pagination-controls > section");
+    const pageButton = document.createElement("button");
+    pageButton.textContent = pages;
+    pageButton.className = `page-button button ${pages === page ? "green-button" : "transparent-button"}`;
+    pageButton.disabled = pages === page;
+    section.appendChild(pageButton);
+    pages--;
+  }
+
+  $element("p > span:last-of-type").textContent = totalReports;
+  $element(".prev").disabled = page <= 1;
+  $element(".next").disabled = page >= totalPages;
+</script>

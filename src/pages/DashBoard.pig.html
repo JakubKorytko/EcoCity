@@ -1,1 +1,108 @@
-<content> Dashboard </content>
+<content>
+  <main>
+    <section>
+      <div>
+        <h3>My Dashboard</h3>
+        <NavLink to="/report/add" class="button green-button"
+          >+ New Report</NavLink
+        >
+      </div>
+      <section>
+        <DashboardCards />
+      </section>
+      <section>
+        <div>
+          <h4>Recent Reports</h4>
+          <div>
+            <input type="search" placeholder="Search reports..." />
+            <img src="/public/images/other_icons/filter.svg" />
+          </div>
+        </div>
+        <DashboardReports />
+      </section>
+      <section>
+        <PaginationFooter />
+      </section>
+    </section>
+  </main>
+  <PageFooter />
+</content>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    main {
+      width: 100%;
+      padding: 30px 0;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+
+      > section {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        width: 70%;
+
+        > div {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        section:first-of-type {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 24px;
+        }
+
+        section:nth-of-type(2) {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          border-radius: 12px;
+          background: #fff;
+          box-shadow:
+            0 1px 2px 0 rgba(0, 0, 0, 0.05),
+            0 0 0 0 rgba(0, 0, 0, 0),
+            0 0 0 0 rgba(0, 0, 0, 0);
+          padding: 24px;
+          > div {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            > div {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              gap: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  $H.observe("reports");
+
+  $element("PaginationFooter").pass({
+    page: 1,
+    totalPages: Math.ceil($H.reports.length / 10),
+    totalReports: $H.reports.length,
+    reportsPerPage: 10,
+  });
+</script>

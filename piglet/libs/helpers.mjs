@@ -6,11 +6,12 @@ import { routes } from "@Piglet/libs/routes";
 import { mergeWebTypes } from "@Piglet/builder/webTypes";
 import console from "@Piglet/utils/console";
 import {
- toPascalCase,
- toKebabCase,
  extractComponentTagsFromString,
+ toKebabCase,
+ toPascalCase,
 } from "@Piglet/browser/sharedHelpers";
 import { resolvePath } from "@Piglet/utils/paths";
+import Parser from "@Piglet/parser/values";
 const routeNames = CONST.routes.reduce((acc, route) => {
  acc[route] = Symbol(route);
  return acc;
@@ -96,9 +97,57 @@ const isRequestFromServer = (req) => {
  }
  return false;
 };
+function determineComponentType(routeName) {
+ const { html, script, layout } = CONST.customRouteSubAliases.component;
+ const { component } = CONST.customRouteAliases;
+ if (routeName.startsWith(html)) return "HTML";
+ if (routeName.startsWith(script)) return "Script";
+ if (routeName.startsWith(layout)) return "Layout";
+ if (routeName.startsWith(component)) return "Component";
+ return "Unknown";
+}
+const transformIntoReadableRequest = (routeName, req) => {
+ let type =
+ routeName.description.charAt(0).toUpperCase() +
+ routeName.description.slice(1);
+ if (type === "Piglet") return undefined;
+ const url = new URL(req.url, "fake:/");
+ const paramsDict = Object.fromEntries(url.searchParams.entries());
+ delete paramsDict["noCache"];
+ let value = req.url.split("?")[0];
+ if (type === "Component") {
+ const { html, script, layout } = CONST.customRouteSubAliases.component;
+ const { component } = CONST.customRouteAliases;
+ const replaceRegex = new RegExp(
+ `${html}|${script}|${layout}|${component}|/`,
+ "g",
+ );
+ const componentType = determineComponentType(value);
+ value = value.replace(replaceRegex, "");
+ type = `Component:${componentType}`;
+ }
+ if (type === "Page") {
+ value = Parser.routeAliases[value] || value;
+ type = "Page";
+ }
+ return {
+ type,
+ value,
+ params: paramsDict,
+ };
+};
 const serverHandler = async (req, res) => {
  if (isRequestFromServer(req)) {
- return req.socket.server.customRoutes[getRouteFromRequest(req)](req, res);
+ const routeName = getRouteFromRequest(req);
+ const route = req.socket.server.customRoutes[routeName];
+ req.pigDescription = transformIntoReadableRequest(routeName, req);
+ if (typeof req.socket.server.customRoutes.middleware === "function") {
+ const middleware = req.socket.server.customRoutes.middleware;
+ await middleware(req, res);
+ }
+ if (!res.writableEnded && !res.headersSent) {
+ return route(req, res);
+ }
  }
 };
 function getPaths() {

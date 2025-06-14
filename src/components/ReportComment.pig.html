@@ -1,0 +1,75 @@
+<content>
+  <div>
+    <div>
+      <img src="/public/images/avatars/placeholder.png" alt="placeholder" />
+      <section>
+        <h4>Environmental Officer</h4>
+        <p>Jan 16, 2025</p>
+      </section>
+    </div>
+    <p>We have scheduled a cleanup team for next week.</p>
+  </div>
+</content>
+
+<script>
+  const { data } = $attrs;
+
+  if (!data) throw out;
+
+  const date = new Date(data.comment.createdAt);
+  $element("div>div>section>h4").innerText = data.user.name || "Unknown User";
+  $element("div>div>section>p").innerText = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+  $element("div>p").innerText = data.comment.content || "No comment provided.";
+  $element("div>img").src =
+    data.user.avatar || "/public/images/avatars/placeholder.png";
+</script>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    p,
+    h4 {
+      margin: 0;
+    }
+
+    > div {
+      display: flex;
+      gap: 16px;
+      flex-direction: column;
+
+      > div {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+        align-items: center;
+
+        img {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+        }
+
+        section {
+          h4 {
+            font-size: 16px;
+            font-weight: bold;
+          }
+          p {
+            font-size: 14px;
+            color: #6b7280; /* gray-500 */
+          }
+        }
+      }
+
+      p {
+        font-size: 14px;
+        color: #374151; /* gray-700 */
+      }
+    }
+  }
+</style>

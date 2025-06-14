@@ -1,0 +1,156 @@
+<content>
+  <div>
+    <p>Photos</p>
+    <label for="files">
+      <h4>Drag and drop photos here or</h4>
+      <h4>browse files</h4>
+      <p>Maximum 2 photos (10MB each)</p>
+      <input type="file" id="files" name="files" accept="image/*" multiple />
+      <RenderIf condition="$selectedFile">
+        <img />
+        <img />
+      </RenderIf>
+    </label>
+  </div>
+</content>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  img {
+    height: 100px;
+  }
+
+  label {
+    position: relative;
+    border-radius: 8px;
+    border: 2px dashed #d1d5db;
+    background: #f9fafb;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  input[type="file"] {
+    & * {
+      width: 100%;
+      height: 100%;
+    }
+    border: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+</style>
+
+<script>
+  $B.selectedFile = $$(false);
+
+  $element("input").on("drop", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const files = event.dataTransfer.files;
+
+    let filesUploaded = 0;
+
+    while (filesUploaded < Math.min(files.length, 2)) {
+      if (
+        files[filesUploaded] &&
+        files[filesUploaded].type.startsWith("image/")
+      ) {
+        if (files[filesUploaded].size > 10 * 1024 * 1024) {
+          window.ecoCityToastManager.show({
+            title: "File size exceeds 10MB limit",
+            message: "Please upload a smaller image.",
+            type: "warning",
+          });
+          continue;
+        }
+
+        $B.selectedFile = true;
+
+        $element(`img:nth-of-type(${filesUploaded + 1})`).src =
+          URL.createObjectURL(files[filesUploaded]);
+        filesUploaded++;
+      } else {
+        window.ecoCityToastManager.show({
+          title: "Not all images were uploaded",
+          message: "Only image files are allowed.",
+          type: "warning",
+        });
+        break;
+      }
+    }
+
+    if (files.length > 2) {
+      window.ecoCityToastManager.show({
+        title: "Too many files uploaded",
+        message: "Only the first 2 images will be used.",
+        type: "warning",
+      });
+    }
+
+    const dataTransfer = new DataTransfer();
+    for (let i = 0; i < files.length && i < 2; i++) {
+      if (
+        files[i].type.startsWith("image/") &&
+        files[i].size <= 10 * 1024 * 1024
+      ) {
+        dataTransfer.items.add(files[i]);
+      }
+    }
+
+    event.target.files = dataTransfer.files;
+  });
+
+  $element("input").on("change", (event) => {
+    const files = event.target.files;
+
+    for (let i = 0; i < Math.min(files.length, 2); i++) {
+      if (!files[i].type.startsWith("image/")) {
+        window.ecoCityToastManager.show({
+          title: "Not all images were uploaded",
+          message: "Only image files are allowed.",
+          type: "warning",
+        });
+        continue;
+      }
+      if (files[i].size > 10 * 1024 * 1024) {
+        window.ecoCityToastManager.show({
+          title: "File size exceeds 10MB limit",
+          message: "Please upload a smaller image.",
+          type: "warning",
+        });
+        continue;
+      }
+      $B.selectedFile = true;
+      $element(`img:nth-of-type(${i + 1})`).src = URL.createObjectURL(files[i]);
+    }
+
+    if (files.length > 2) {
+      window.ecoCityToastManager.show({
+        title: "Too many files uploaded",
+        message: "Only the first 2 images will be used.",
+        type: "warning",
+      });
+    }
+
+    const dataTransfer = new DataTransfer();
+    for (let i = 0; i < files.length && i < 2; i++) {
+      if (
+        files[i].type.startsWith("image/") &&
+        files[i].size <= 10 * 1024 * 1024
+      ) {
+        dataTransfer.items.add(files[i]);
+      }
+    }
+
+    event.target.files = dataTransfer.files;
+  });
+</script>

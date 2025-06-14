@@ -1,0 +1,86 @@
+<content>
+  <main>
+    <div>
+      <p>Unknown</p>
+      <h3>??</h3>
+    </div>
+    <img src="/public/images/reports/placeholder.png" alt="Report Icon" />
+  </main>
+</content>
+
+<script>
+  const types = {
+    total: {
+      label: "Total Reports",
+      icon: "/public/images/green_icons/document.svg",
+      iconBGColor: "#DBEAFE",
+    },
+    pending: {
+      label: "Pending Review",
+      icon: "/public/images/other_icons/clock.svg",
+      iconBGColor: "#FEF3C7",
+    },
+    resolved: {
+      label: "Resolved",
+      icon: "/public/images/green_icons/checkmark.svg",
+      iconBGColor: "var(--Secondary_color)",
+    },
+  };
+
+  const { type, count } = $attrs;
+
+  $element("main > div:first-of-type > p").textContent = types[type].label;
+  $element("main > div:first-of-type > h3").textContent = count;
+  $element("main > img").src = types[type].icon;
+  $element("main > img").style.backgroundColor = types[type].iconBGColor;
+</script>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    width: 490px;
+    height: 100px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow:
+      0 1px 2px 0 rgba(0, 0, 0, 0.05),
+      0 0 0 0 rgba(0, 0, 0, 0),
+      0 0 0 0 rgba(0, 0, 0, 0);
+
+    main {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+      padding: 24px;
+
+      p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px; /* 142.857% */
+      }
+
+      > div:first-of-type {
+        display: flex;
+        flex-direction: column;
+      }
+
+      img {
+        border-radius: 8px;
+        width: 54px;
+        height: 54px;
+        padding: 16px;
+      }
+    }
+  }
+</style>

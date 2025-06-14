@@ -1,0 +1,143 @@
+<content>
+  <div>
+    <section>
+      <h3>Description</h3>
+      <p>
+        Large amounts of construction waste and household items have been dumped
+        near the river bank. This poses environmental risks and affects the
+        local wildlife.
+      </p>
+      <div>
+        <img src="/public/images/reports/placeholder.png" alt="placeholder" />
+      </div>
+    </section>
+    <section>
+      <h3>Comments</h3>
+      <textarea>Add a comment...</textarea>
+      <button class="button green-button">Post Comment</button>
+      <div></div>
+    </section>
+  </div>
+</content>
+
+<script>
+  const {
+    data: { report, user, comments, users },
+  } = $attrs;
+
+  $element("div>section:first-of-type>p").innerText =
+    report.description || "No description provided.";
+  $element("div>section:first-of-type img:nth-child(1)").src =
+    report.image || "/public/images/reports/placeholder.png";
+
+  const commentElements = [];
+
+  for (const comment of comments) {
+    const user = users.find((u) => u.id === comment.authorId);
+    const commentElement = $`<ReportComment ${{
+      data: {
+        comment: comment,
+        user: user || {
+          name: "Unknown User",
+          avatarUrl: "/public/images/avatars/placeholder.png",
+        },
+      },
+    }} />`;
+    commentElements.push(commentElement);
+  }
+
+  $element("div>section:nth-child(2)>div").append(...commentElements);
+</script>
+
+<style>
+  @import "/public/styles/globals.css";
+
+  :host {
+    display: contents;
+
+    p,
+    h2,
+    h3,
+    h4 {
+      margin: 0;
+    }
+
+    h3 {
+      color: #000;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 28px;
+    }
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      gap: 30px;
+
+      section {
+        flex-grow: 1;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow:
+          0 1px 2px 0 rgba(0, 0, 0, 0.05),
+          0 0 0 0 rgba(0, 0, 0, 0),
+          0 0 0 0 rgba(0, 0, 0, 0);
+        padding: 24px;
+
+        &:first-of-type {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          p {
+            color: #374151;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+          }
+
+          > div {
+            display: flex;
+            flex-direction: row;
+            margin-top: 16px;
+            gap: 20px;
+
+            img {
+              max-width: 45%;
+              max-height: 200px;
+              height: auto;
+              border-radius: 8px;
+            }
+          }
+        }
+
+        &:nth-of-type(2) {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+
+          button {
+            width: fit-content;
+          }
+
+          textarea {
+            width: 100%;
+            height: 100px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            padding: 10px;
+            resize: none;
+          }
+
+          > div {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+          }
+        }
+      }
+    }
+  }
+</style>
