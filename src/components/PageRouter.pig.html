@@ -7,6 +7,25 @@
 </style>
 
 <script>
+  const forbiddenRoutes = ["/dashboard", "/report/add"];
+
+  $H.observe("isAuthenticated");
+
+  const { data = [] } = $reason;
+
+  const didLoggedStatusChange = data.some(
+    ({ property, prevValue, value }) =>
+      property === "isAuthenticated" && prevValue !== value,
+  );
+
+  if (
+    didLoggedStatusChange &&
+    forbiddenRoutes.includes($H.route) &&
+    !$H.isAuthenticated
+  ) {
+    $navigate("/");
+  }
+
   const onPopState = ({ detail: { route } }) => {
     $H.route = route;
   };

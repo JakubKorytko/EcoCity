@@ -27,7 +27,7 @@
     )
       .then((value) => {
         if (value && value.token) {
-          $H.user = value;
+          $H.user = value.user;
           $H.isAuthenticated = true;
         } else {
           $H.user = { email: "", name: "", role: "guest", token: "" };
@@ -85,9 +85,19 @@
 
         const toast = $`<ToastComponent ${{ title, type, message }} />`;
 
-        document.body.append(toast);
+        document.querySelector("app-root").shadowRoot.append(toast);
+
         setTimeout(() => {
-          toast.removeToast();
+          if (typeof toast.removeToast === "function") {
+            toast.removeToast();
+          } else {
+            toast?.remove();
+            const index = this.openedToasts.indexOf(toast);
+            if (index === -1) {
+              return;
+            }
+            this.openedToasts[index] = null;
+          }
         }, time);
       },
     };

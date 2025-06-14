@@ -1,12 +1,38 @@
 import { sleep } from "/modules/helpers.pig";
+import CookieManager from "/modules/CookieManager.pig";
+import { transition } from "/modules/helpers.pig";
 
 const excludedRoutes = ["/signin", "/signup"];
 
 $H.observe("route");
+$H.observe("user");
 
 if (!$H.route) {
   throw out;
 }
+
+const logout = async () => {
+  await $api("/logout", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${CookieManager.get("session")}` },
+  });
+  transition(() => {
+    $H.user = { email: "", name: "Unknown User", role: "guest", token: "" };
+    $H.isAuthenticated = false;
+  });
+};
+
+$onBeforeUpdate(() => {
+  $element(".logout")?.off("click", logout);
+});
+
+$element(".logout")?.on("click", logout);
+
+const setAvatar = () => {
+  const avatar = $element(".avatar", HTMLImageElement.prototype);
+  if (avatar)
+    avatar.src = $H.user?.avatar ?? "/public/images/avatars/placeholder.png";
+};
 
 const updateCurrentPage = (newRoute) => {
   const route = newRoute || $H.route;
@@ -34,6 +60,7 @@ if ($B.firstRender) {
   updateCurrentPage();
 
   $B.firstRender = false;
+  setAvatar();
 } else {
   const shouldDisplayNavBarBasedOnNewRoute = !excludedRoutes.includes($H.route);
 
@@ -51,9 +78,8 @@ if ($B.firstRender) {
       await sleep(200);
       updateCurrentPage();
       $element("main")?.style.removeProperty("transform");
-
-      console.log("got here", $element("main")?.style);
     }
+    setAvatar();
   })();
   $B.shouldDisplayNavBar = shouldDisplayNavBarBasedOnNewRoute;
 }

@@ -21,6 +21,11 @@
             <NavLink to="/report/add" class="button green-button"
               >+ New Report</NavLink
             >
+            <img
+              class="button gray-button logout"
+              src="/public/images/other_icons/signout.svg"
+            />
+            <img class="avatar" src="/public/images/avatars/placeholder.png" />
           </RenderIf>
         </RenderIf>
         <RenderIf condition="$currentPage.reports">
@@ -29,10 +34,24 @@
           <NavLink to="/report/add" class="button green-button"
             >+ New Report</NavLink
           >
+          <RenderIf condition="H$isAuthenticated">
+            <img
+              class="button gray-button logout"
+              src="/public/images/other_icons/signout.svg"
+            />
+            <img class="avatar" src="/public/images/avatars/placeholder.png" />
+          </RenderIf>
         </RenderIf>
         <RenderIf condition="$currentPage.dashboardOrNew">
           <NavLink to="/reports">Reports</NavLink>
           <NavLink to="/dashboard">Dashboard</NavLink>
+          <RenderIf condition="H$isAuthenticated">
+            <img
+              class="button gray-button logout"
+              src="/public/images/other_icons/signout.svg"
+            />
+            <img class="avatar" src="/public/images/avatars/placeholder.png" />
+          </RenderIf>
         </RenderIf>
       </main>
     </nav>

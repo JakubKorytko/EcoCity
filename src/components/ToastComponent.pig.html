@@ -92,12 +92,6 @@
 
   $B.firstRender = $$(true);
 
-  if (!$B.firstRender) {
-    throw out;
-  }
-
-  $B.firstRender = false;
-
   const { type, title, message } = $attrs;
 
   const types = {
@@ -111,6 +105,12 @@
     `/public/images/dots/${types[type in types ? type : "info"]}.svg`;
   $element("div>span").innerText = title || "Notification";
   $element("p").innerText = message || "No message provided.";
+
+  if (!$B.firstRender) {
+    throw out;
+  }
+
+  $B.firstRender = false;
 
   window.ecoCityToastManager.blockToastQueue();
 

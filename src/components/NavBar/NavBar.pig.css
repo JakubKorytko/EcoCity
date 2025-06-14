@@ -66,3 +66,9 @@ NavLink.active:not(header *) {
     }
   }
 }
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+}

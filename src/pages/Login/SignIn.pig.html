@@ -153,14 +153,21 @@
         }
       })
       .then((response) => {
+        const user = response.user ?? {
+          email: "",
+          name: "Unknown User",
+          role: "guest",
+          token: "",
+        };
+        const firstName = user.name.split(" ")[0] || user.name;
+
         window.ecoCityToastManager.show({
           type: "success",
           title: "Login Successful",
-          message: `Welcome back, ${response.email}!`,
+          message: `Welcome back, ${firstName}!`,
         });
-
         CookieManager.set("session", response.token);
-        $H.user = response;
+        $H.user = user;
         $H.isAuthenticated = true;
         $navigate("/");
       })
