@@ -29,18 +29,13 @@
 
 <script>
   import getDistanceToLocation from "/modules/location.pig";
+  import { notImplemented } from "/modules/helpers.pig";
 
   const { data } = $attrs;
 
   $element("NavLink").setAttribute("to", `/report?id=${data.id}`);
 
-  $element("img#edit").on("click", () => {
-    window.ecoCityToastManager.show({
-      type: "info",
-      title: "Edit Report",
-      message: "This feature is not implemented yet.",
-    });
-  });
+  $element("img#edit").on("click", () => notImplemented("Edit report"));
 
   getDistanceToLocation(data.geoLocation?.latitude, data.geoLocation?.longitude)
     .then(({ distanceKm }) => {
@@ -49,8 +44,6 @@
       ).textContent = `${distanceKm.toFixed(2)} km away` || "";
     })
     .catch(console.warn);
-
-  console.log(data);
 
   $element("main > section:first-of-type > img").src =
     data.image || "/public/images/reports/placeholder.png";

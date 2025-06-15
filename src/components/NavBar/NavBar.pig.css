@@ -49,9 +49,9 @@ NavLink.active:not(header *) {
       color: #4b5563;
       font-size: 16px;
       line-height: 24px;
-      transition: ease-in-out transform 0.2s;
+      transition: ease-in-out opacity 0.2s;
       transform-origin: right;
-      transform: scaleX(1);
+      opacity: 1;
 
       NavLink {
         display: flex;
@@ -71,4 +71,18 @@ NavLink.active:not(header *) {
   width: 48px;
   height: 48px;
   border-radius: 9999px;
+}
+
+.username {
+  color: black;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  margin-left: -16px;
+}
+
+.logout {
+  padding: 6px;
+  width: 40px;
+  height: 40px;
 }

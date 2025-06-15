@@ -13,17 +13,22 @@
     </section>
     <section>
       <h3>Comments</h3>
-      <textarea>Add a comment...</textarea>
-      <button class="button green-button">Post Comment</button>
+      <RenderIf condition="H$isAuthenticated">
+        <textarea>Add a comment...</textarea>
+        <button class="button green-button">Post Comment</button>
+      </RenderIf>
       <div></div>
     </section>
   </div>
 </content>
 
 <script>
-  const {
-    data: { report, user, comments, users },
-  } = $attrs;
+  const { data } = $attrs;
+  const { report, user, comments } = data ?? {};
+
+  $H.observe("users");
+
+  if (!report || !user) throw out;
 
   $element("div>section:first-of-type>p").innerText =
     report.description || "No description provided.";
@@ -32,8 +37,10 @@
 
   const commentElements = [];
 
+  if (!$H.users) throw out;
+
   for (const comment of comments) {
-    const user = users.find((u) => u.id === comment.authorId);
+    const user = $H.users.find((u) => u.id === comment.authorId);
     const commentElement = $`<ReportComment ${{
       data: {
         comment: comment,

@@ -9,26 +9,43 @@
       </section>
     </div>
     <div>
-      <button class="button gray-button">Edit</button>
-      <button class="button green-button">Update Status</button>
+      <RenderIf condition="$didUserCreateReport">
+        <button class="button gray-button edit">Edit</button>
+        <button class="button green-button update">Update Status</button>
+      </RenderIf>
     </div>
   </header>
 </content>
 
 <script>
-  const {
-    data: { report, user, comments },
-  } = $attrs;
+  import { notImplemented } from "/modules/helpers.pig";
+
+  const { data } = $attrs;
+  const { report, user, comments } = data ?? {};
+
+  $H.observe("user");
+
+  if (!report || !user) throw out;
+
+  $B.didUserCreateReport = $H.user && report.authorId === $H.user.id;
 
   $element("div>h3").innerText = report.title || "Report Title";
   $element("div>section>span:nth-child(1)").innerText =
-    `Reported on ${new Date(report.createdAt).toLocaleDateString()}`;
+    `Reported on ${new Date(Number(report.createdAt)).toLocaleDateString()}`;
   $element("div>section>span:nth-child(2)").innerText =
     `By ${user.name || "Unknown User"}`;
   $element("div>section>span:nth-child(3)").innerText =
     report.status || "Unknown Status";
   $element("div>section>span:nth-child(3)").className =
     `badge badge-${report.status?.toLowerCase() || "badge"}`;
+
+  $element(".edit")?.on("click", () => {
+    notImplemented("Edit report");
+  });
+
+  $element(".update")?.on("click", () => {
+    notImplemented("Update report status");
+  });
 </script>
 
 <style>

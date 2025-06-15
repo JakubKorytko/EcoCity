@@ -1,7 +1,10 @@
 <content></content>
 
 <script>
+  import { notImplemented } from "/modules/helpers.pig";
+
   const { data } = $attrs;
+
   const trElement = document.createElement("tr");
   trElement.innerHTML = `
         <td>${data.title}</td>
@@ -23,13 +26,7 @@
   trElement.querySelector("td:last-of-type").prepend(navLink);
   $document.append(trElement);
 
-  $element("img#edit").on("click", () => {
-    window.ecoCityToastManager.show({
-      type: "info",
-      title: "Edit Report",
-      message: "This feature is not implemented yet.",
-    });
-  });
+  $element("img#edit").on("click", () => notImplemented("Edit report"));
 </script>
 
 <style>

@@ -8,8 +8,13 @@
   import { getReportsCount } from "/modules/helpers.pig";
 
   $H.observe("reports");
+  $H.observe("user");
 
-  const count = getReportsCount($H.reports);
+  if (!$H.reports || !$H.user) throw out;
+
+  const reports =
+    $H.reports.filter((report) => report.authorId === $H.user.id) ?? [];
+  const count = getReportsCount(reports);
 
   $elements("DashboardCard").forEach((card) => {
     const type = card.attrs.type;

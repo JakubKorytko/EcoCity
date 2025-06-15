@@ -7,7 +7,7 @@ const excludedRoutes = ["/signin", "/signup"];
 $H.observe("route");
 $H.observe("user");
 
-if (!$H.route) {
+if (!$H.route || !$H.user) {
   throw out;
 }
 
@@ -26,16 +26,17 @@ $onBeforeUpdate(() => {
   $element(".logout")?.off("click", logout);
 });
 
-$element(".logout")?.on("click", logout);
-
-const setAvatar = () => {
+const setListenersAndContent = () => {
   const avatar = $element(".avatar", HTMLImageElement.prototype);
   if (avatar)
     avatar.src = $H.user?.avatar ?? "/public/images/avatars/placeholder.png";
+  const userName = $element(".username", HTMLSpanElement.prototype);
+  if (userName) userName.textContent = $H.user?.name ?? "Unknown User";
+  $element(".logout")?.on("click", logout);
 };
 
 const updateCurrentPage = (newRoute) => {
-  const route = newRoute || $H.route;
+  const route = (newRoute || $H.route).split("?")[0];
 
   $B.currentPage = {
     home: route === "/",
@@ -60,7 +61,8 @@ if ($B.firstRender) {
   updateCurrentPage();
 
   $B.firstRender = false;
-  setAvatar();
+
+  setListenersAndContent();
 } else {
   const shouldDisplayNavBarBasedOnNewRoute = !excludedRoutes.includes($H.route);
 
@@ -74,12 +76,12 @@ if ($B.firstRender) {
       this.style.removeProperty("display");
       requestAnimationFrame(() => this.style.removeProperty("margin-top"));
     } else {
-      $element("main")?.style.setProperty("transform", "scaleX(0)");
+      $element("main")?.style.setProperty("opacity", "0");
       await sleep(200);
       updateCurrentPage();
-      $element("main")?.style.removeProperty("transform");
+      $element("main")?.style.removeProperty("opacity");
     }
-    setAvatar();
+    setListenersAndContent();
   })();
   $B.shouldDisplayNavBar = shouldDisplayNavBarBasedOnNewRoute;
 }

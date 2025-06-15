@@ -16,10 +16,15 @@
 <script>
   $H.observe("reports");
   $H.observe("comments");
+  $H.observe("user");
+
+  if (!$H.reports || !$H.comments) throw out;
+
+  const reports = $H.reports.filter((report) => report.authorId === $H.user?.id);
 
   const elements = [];
 
-  $H.reports.forEach(function (report) {
+  reports.forEach(function (report) {
     const comments = $H.comments.filter(
       (comment) => comment.reportId === report.id,
     );
