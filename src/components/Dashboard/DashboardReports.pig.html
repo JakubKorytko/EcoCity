@@ -20,7 +20,9 @@
 
   if (!$H.reports || !$H.comments) throw out;
 
-  const reports = $H.reports.filter((report) => report.authorId === $H.user?.id);
+  const reports = $H.reports.filter(
+    (report) => report.authorId === $H.user?.id,
+  );
 
   const elements = [];
 
@@ -29,7 +31,8 @@
       (comment) => comment.reportId === report.id,
     );
 
-    const date = new Date(report.updatedAt || report.createdAt);
+    const dateString = report.updatedAt || report.createdAt;
+    const date = new Date(Number(dateString));
 
     const reportEl = $`<DashboardReport ${{
       data: {
@@ -41,7 +44,7 @@
     elements.push(reportEl);
   });
 
-  $element("tbody").append(...elements);
+  $element("tbody").replaceChildren(...elements);
 </script>
 
 <style>
@@ -52,11 +55,17 @@
     border-collapse: collapse;
   }
 
-  th,
-  td {
+  th {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    color: #4b5563;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
   }
 
   th {

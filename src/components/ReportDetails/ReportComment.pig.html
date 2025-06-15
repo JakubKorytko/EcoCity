@@ -16,7 +16,7 @@
 
   if (!data) throw out;
 
-  const date = new Date(data.comment.createdAt);
+  const date = new Date(Number(data.comment.createdAt));
   $element("div>div>section>h4").innerText = data.user.name || "Unknown User";
   $element("div>div>section>p").innerText = date.toLocaleDateString("en-US", {
     year: "numeric",

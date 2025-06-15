@@ -100,11 +100,12 @@
 
       &:nth-of-type(3) {
         display: flex;
-        width: 100%;
+        max-width: 90%;
         background: #f9fafb;
         flex-direction: column;
         justify-content: space-evenly;
         padding: 60px 0;
+        margin: 0 auto;
         align-items: center;
         gap: 48px;
 

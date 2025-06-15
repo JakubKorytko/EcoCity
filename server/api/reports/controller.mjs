@@ -24,6 +24,26 @@ export default async (req, res) => {
     }
 
     const allReports = await db.selectAll("reports");
+    const geolocations = await db.selectAll("geolocations");
+
+    for (const report of allReports) {
+      const geolocation = geolocations.find(
+        (geo) => geo.id === report.geoLocationId,
+      );
+
+      report.geoLocation = geolocation
+        ? {
+            latitude: geolocation.latitude,
+            longitude: geolocation.longitude,
+            city: geolocation.city || "Unknown",
+          }
+        : {
+            latitude: 0,
+            longitude: 0,
+            city: "Unknown",
+          };
+    }
+
     const paginatedReports = allReports.slice(
       from ? Math.max(parseInt(from), 0) : 0,
       to ? Math.min(parseInt(to) + 1, allReports.length) : allReports.length,
