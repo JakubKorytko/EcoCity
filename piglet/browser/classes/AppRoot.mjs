@@ -56,6 +56,7 @@ class AppRoot extends ReactiveComponent {
  __navigatorId = 0;
  
  __routeCandidate = "";
+ __search = {};
  static get observedAttributes() {
  return [CONST.routeAttribute];
  }
@@ -75,6 +76,10 @@ class AppRoot extends ReactiveComponent {
  
  candidate: {
  get: () => this.__routeCandidate,
+ },
+ 
+ params: {
+ get: () => this.__search,
  },
  });
  }
@@ -102,23 +107,45 @@ class AppRoot extends ReactiveComponent {
  );
  }
  
- reset() {
- this.state = {};
+ getLayoutComponents() {
  const keys = Object.keys(this.globalState);
  const constructed = keys.map((key) => this.constructedComponents[key]);
+ const layoutComponents = [];
  for (const component of constructed) {
  let isInAppContent = false;
  let currentElement = component;
  while (currentElement) {
- if (currentElement === this.appContent) {
+ let previousElement = currentElement;
+ currentElement = currentElement.internal?.parent;
+ if (currentElement === this) {
+ let currentParent = previousElement.parentNode;
+ while (currentParent) {
+ if (currentParent === this.appContent) {
  isInAppContent = true;
  break;
  }
- currentElement = currentElement.internal?.parent;
+ currentParent = currentParent.parentNode;
  }
- if (isInAppContent) delete this.globalState[component.__componentKey];
+ if (isInAppContent) break;
  }
- this.componentCounter = 0;
+ }
+ if (!isInAppContent && component !== this) {
+ layoutComponents.push(component);
+ }
+ }
+ return layoutComponents;
+ }
+ 
+ reset(layoutComponents = []) {
+ this.state = {};
+ const keys = Object.keys(this.globalState);
+ const constructed = keys.map((key) => this.constructedComponents[key]);
+ for (const component of constructed) {
+ if (!layoutComponents.includes(component)) {
+ delete this.globalState[component.__componentKey];
+ }
+ }
+ this.componentCounter = layoutComponents.length;
  }
  
  get tree() {
@@ -132,7 +159,7 @@ class AppRoot extends ReactiveComponent {
  }
  
  attributeChangedCallback(name, oldValue, newValue) {
- if (name !== CONST.routeAttribute) return;
+ if (name !== CONST.routeAttribute || this.wasAttributeSetViaSetter) return;
  if (this.route && !newValue) return this.setAttribute(name, "/");
  this.route = newValue;
  }
@@ -142,8 +169,9 @@ class AppRoot extends ReactiveComponent {
  const persistentChildren = this.appContent.querySelectorAll(
  "*[data-piglet-persistent]",
  );
+ const layoutComponents = this.getLayoutComponents();
  this.appContent.replaceChildren(...persistentChildren);
- this.reset();
+ this.reset(layoutComponents);
  }
  
  transitionCallback({ base, layout }, isInitial = false) {
@@ -158,6 +186,7 @@ class AppRoot extends ReactiveComponent {
  }
  
  startRouteChain(navigator, data) {
+ data.route = data.route?.split("?")[0] || "";
  async function* gen({ route, isInitial, isReloaded }) {
  if (isReloaded || Object.keys(this._layoutPaths).length === 0) {
  yield await this.getLayoutPaths();
@@ -401,9 +430,7 @@ class AppRoot extends ReactiveComponent {
  testConnection = await fetch(targetRoute);
  } catch {}
  const testURL = new URL(testConnection.url);
- const route = testURL.pathname;
- routeData.route = route;
- routeData.isReloaded = this._route === route;
+ const route = testURL.pathname + testURL.search;
  if (route !== targetRoute) {
  routeData.redirected = true;
  }
@@ -419,7 +446,10 @@ class AppRoot extends ReactiveComponent {
  );
  return;
  }
+ routeData.route = route;
+ routeData.isReloaded = this._route === route;
  const navigator = this.createNavigator(route);
+ this.__search = Object.fromEntries(testURL.searchParams.entries());
  this.dispatchEvent(
  new RouteEvent(routeData, CONST.pigletEvents.beforeRouteChange),
  );
@@ -428,6 +458,9 @@ class AppRoot extends ReactiveComponent {
  return;
  }
  this._route = route;
+ this.wasAttributeSetViaSetter = true;
+ this.setAttribute(CONST.routeAttribute, route);
+ this.wasAttributeSetViaSetter = false;
  if (!native) {
  window.history.pushState({}, "", route);
  }
