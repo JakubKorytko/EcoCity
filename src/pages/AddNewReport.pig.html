@@ -9,7 +9,7 @@
           <SubmitCard type="air" />
           <SubmitCard type="water" />
         </div>
-        <form>
+        <form id="form">
           <div>
             <label for="title">Report Title *</label>
             <input
@@ -42,13 +42,13 @@
           </div>
           <div>
             <UploadFile />
-            <!--            <label for="image">Photos</label>-->
-            <!--            <input type="file" id="image" name="image" accept="image/*" />-->
           </div>
         </form>
         <div>
-          <button class="button green-button">Submit Report</button>
-          <button class="button empty-green-button">Cancel</button>
+          <button class="button green-button" type="submit" form="form">
+            Submit Report
+          </button>
+          <button class="button empty-green-button cancel">Cancel</button>
         </div>
       </div>
     </section>
@@ -107,3 +107,18 @@
     }
   }
 </style>
+
+<script>
+  import { notImplemented } from "/modules/helpers.pig";
+
+  $element("button.cancel").on("click", (e) => {
+    $navigate("/");
+  });
+
+  $element("button[type='submit']").on("click", (e) => {
+    if ($element("form", HTMLFormElement.prototype).checkValidity()) {
+      e.preventDefault();
+      notImplemented("Add new report");
+    }
+  });
+</script>

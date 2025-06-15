@@ -15,6 +15,14 @@ function getReportsCount(reports) {
   };
 }
 
+function notImplemented(actionName) {
+  window.ecoCityToastManager.show({
+    type: "info",
+    title: actionName,
+    message: "This feature is not implemented yet.",
+  });
+}
+
 function getTimeDifference(timestamp) {
   const now = Date.now();
   const diff = now - timestamp;
@@ -74,4 +82,5 @@ export {
   getTimeDifference,
   getRecentReportsArray,
   transition,
+  notImplemented,
 };

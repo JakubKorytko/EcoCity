@@ -6,4 +6,4 @@ services:
     ports:
       - "2137:2137"
     volumes:
-      - ./server/database/database.sqlite:/app/server/database/database.sqlite
+      - ./server/database:/app/server/database

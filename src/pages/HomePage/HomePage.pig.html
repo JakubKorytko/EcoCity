@@ -49,9 +49,11 @@
         environment cleaner and safer.
       </p>
       <div>
-        <NavLink to="/signup" class="button white-button-primary"
-          >Create Account</NavLink
-        >
+        <RenderIf condition="!H$isAuthenticated">
+          <NavLink to="/signup" class="button white-button-primary"
+            >Create Account</NavLink
+          >
+        </RenderIf>
         <NavLink to="/reports" class="button empty-white-button"
           >View Reports</NavLink
         >

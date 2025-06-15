@@ -127,8 +127,16 @@
 
 <script>
   import { transition } from "/modules/helpers.pig";
+  import {notImplemented} from "/modules/helpers.pig";
 
   $B.isPasswordVisible = [];
+
+  $element("button[type='submit']").on("click", (e) => {
+    if ($element("form", HTMLFormElement.prototype).checkValidity()) {
+      e.preventDefault();
+      notImplemented("Sign up");
+    }
+  })
 
   $elements(".eye").forEach((eye, index) => {
     $B.isPasswordVisible[index] = false;

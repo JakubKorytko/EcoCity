@@ -12,14 +12,15 @@
 </content>
 
 <script>
-  import { getUrlParams } from "/modules/helpers.pig";
+  import {getUrlParams} from "/modules/helpers.pig";
 
-  const params = getUrlParams();
-  const reportId = Number(params.id);
+  const reportId = window.location.params.id ?? getUrlParams().id;
 
   $H.observe("reports");
   $H.observe("users");
   $H.observe("comments");
+  if (!$H.reports || !$H.users || !$H.comments) throw out;
+
 
   const report = $H.reports.find((r) => r.id === reportId);
 

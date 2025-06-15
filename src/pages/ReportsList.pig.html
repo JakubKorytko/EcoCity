@@ -68,6 +68,8 @@
 <script>
   $H.observe("reports");
 
+  if (!$H.reports) throw out;
+
   $element("PaginationFooter").pass({
     page: 1,
     totalPages: Math.ceil($H.reports.length / 10),

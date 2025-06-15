@@ -192,8 +192,16 @@
         },
         {
           "name": "DashboardCard",
-          "description": "No description found",
+          "description": "A card component for displaying dashboard statistics",
           "attributes": [
+            {
+              "name": "type",
+              "value": {
+                "type": "string"
+              },
+              "description": "Type of the dashboard card (total, pending, resolved)",
+              "required": true
+            },
             {
               "name": "fragment",
               "description": "Indicates that the component should be rendered as a fragment.",
@@ -247,6 +255,20 @@
           ]
         },
         {
+          "name": "HomePageCard",
+          "description": "No description found",
+          "attributes": [
+            {
+              "name": "fragment",
+              "description": "Indicates that the component should be rendered as a fragment.",
+              "value": {
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
           "name": "DataSource",
           "description": "No description found",
           "attributes": [
@@ -261,7 +283,7 @@
           ]
         },
         {
-          "name": "HomePageCard",
+          "name": "PageRouter",
           "description": "No description found",
           "attributes": [
             {
@@ -290,20 +312,6 @@
         },
         {
           "name": "PageFooter",
-          "description": "No description found",
-          "attributes": [
-            {
-              "name": "fragment",
-              "description": "Indicates that the component should be rendered as a fragment.",
-              "value": {
-                "type": "boolean"
-              },
-              "default": "false"
-            }
-          ]
-        },
-        {
-          "name": "PageRouter",
           "description": "No description found",
           "attributes": [
             {

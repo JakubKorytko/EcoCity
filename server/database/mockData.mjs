@@ -46,7 +46,7 @@ const mockData = {
   userDetails: [
     {
       id: 0,
-      name: "John Doe",
+      name: "Jane Doe",
       avatar: "/public/images/avatars/user_0.jpg",
     },
     {
